@@ -34,4 +34,3 @@ export const projects: ProjectType[] = [
         githubURL: "google.com"
     }
 ]
-

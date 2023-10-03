@@ -15,14 +15,41 @@ const config: GatsbyConfig = {
     options: {
       "icon": "src/images/icon.png"
     }
-  }, "gatsby-plugin-mdx", "gatsby-plugin-sharp", "gatsby-transformer-sharp", {
+  }, "gatsby-plugin-sharp", "gatsby-transformer-sharp",{
     resolve: 'gatsby-source-filesystem',
     options: {
       "name": "images",
       "path": "./src/images/"
     },
     __key: "images"
-  }, {
+  }, 
+  {
+    resolve: `gatsby-transformer-remark`,
+    options: {
+      plugins: [
+        {
+          resolve: `gatsby-remark-images`,
+          options: {
+            maxWidth: 800,
+          },
+        },
+      ],
+    },
+  },
+  {
+    resolve: `gatsby-plugin-mdx`,
+    options: {
+      gatsbyRemarkPlugins: [
+        {
+          resolve: `gatsby-remark-images`,
+          options: {
+            maxWidth: 1200,
+          },
+        },
+      ],
+    },
+  },
+  {
     resolve: 'gatsby-source-filesystem',
     options: {
       "name": "pages",

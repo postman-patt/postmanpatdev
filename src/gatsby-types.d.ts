@@ -1245,6 +1245,243 @@ type JSONQueryOperatorInput = {
   readonly regex: InputMaybe<Scalars['JSON']>;
 };
 
+type MarkdownExcerptFormats =
+  | 'HTML'
+  | 'MARKDOWN'
+  | 'PLAIN';
+
+type MarkdownHeading = {
+  readonly depth: Maybe<Scalars['Int']>;
+  readonly id: Maybe<Scalars['String']>;
+  readonly value: Maybe<Scalars['String']>;
+};
+
+type MarkdownHeadingFieldSelector = {
+  readonly depth: InputMaybe<FieldSelectorEnum>;
+  readonly id: InputMaybe<FieldSelectorEnum>;
+  readonly value: InputMaybe<FieldSelectorEnum>;
+};
+
+type MarkdownHeadingFilterInput = {
+  readonly depth: InputMaybe<IntQueryOperatorInput>;
+  readonly id: InputMaybe<StringQueryOperatorInput>;
+  readonly value: InputMaybe<StringQueryOperatorInput>;
+};
+
+type MarkdownHeadingFilterListInput = {
+  readonly elemMatch: InputMaybe<MarkdownHeadingFilterInput>;
+};
+
+type MarkdownHeadingLevels =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6';
+
+type MarkdownHeadingSortInput = {
+  readonly depth: InputMaybe<SortOrderEnum>;
+  readonly id: InputMaybe<SortOrderEnum>;
+  readonly value: InputMaybe<SortOrderEnum>;
+};
+
+type MarkdownRemark = Node & {
+  readonly children: ReadonlyArray<Node>;
+  readonly excerpt: Maybe<Scalars['String']>;
+  readonly excerptAst: Maybe<Scalars['JSON']>;
+  readonly headings: Maybe<ReadonlyArray<Maybe<MarkdownHeading>>>;
+  readonly html: Maybe<Scalars['String']>;
+  readonly htmlAst: Maybe<Scalars['JSON']>;
+  readonly id: Scalars['ID'];
+  readonly internal: Internal;
+  readonly parent: Maybe<Node>;
+  readonly tableOfContents: Maybe<Scalars['String']>;
+  readonly timeToRead: Maybe<Scalars['Int']>;
+  readonly wordCount: Maybe<MarkdownWordCount>;
+};
+
+
+type MarkdownRemark_excerptArgs = {
+  format?: InputMaybe<MarkdownExcerptFormats>;
+  pruneLength?: InputMaybe<Scalars['Int']>;
+  truncate?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+type MarkdownRemark_excerptAstArgs = {
+  pruneLength?: InputMaybe<Scalars['Int']>;
+  truncate?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+type MarkdownRemark_headingsArgs = {
+  depth: InputMaybe<MarkdownHeadingLevels>;
+};
+
+
+type MarkdownRemark_tableOfContentsArgs = {
+  absolute?: InputMaybe<Scalars['Boolean']>;
+  heading: InputMaybe<Scalars['String']>;
+  maxDepth: InputMaybe<Scalars['Int']>;
+  pathToSlugField?: InputMaybe<Scalars['String']>;
+};
+
+type MarkdownRemarkConnection = {
+  readonly distinct: ReadonlyArray<Scalars['String']>;
+  readonly edges: ReadonlyArray<MarkdownRemarkEdge>;
+  readonly group: ReadonlyArray<MarkdownRemarkGroupConnection>;
+  readonly max: Maybe<Scalars['Float']>;
+  readonly min: Maybe<Scalars['Float']>;
+  readonly nodes: ReadonlyArray<MarkdownRemark>;
+  readonly pageInfo: PageInfo;
+  readonly sum: Maybe<Scalars['Float']>;
+  readonly totalCount: Scalars['Int'];
+};
+
+
+type MarkdownRemarkConnection_distinctArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkConnection_groupArgs = {
+  field: MarkdownRemarkFieldSelector;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+};
+
+
+type MarkdownRemarkConnection_maxArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkConnection_minArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkConnection_sumArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+type MarkdownRemarkEdge = {
+  readonly next: Maybe<MarkdownRemark>;
+  readonly node: MarkdownRemark;
+  readonly previous: Maybe<MarkdownRemark>;
+};
+
+type MarkdownRemarkFieldSelector = {
+  readonly children: InputMaybe<NodeFieldSelector>;
+  readonly excerpt: InputMaybe<FieldSelectorEnum>;
+  readonly excerptAst: InputMaybe<FieldSelectorEnum>;
+  readonly headings: InputMaybe<MarkdownHeadingFieldSelector>;
+  readonly html: InputMaybe<FieldSelectorEnum>;
+  readonly htmlAst: InputMaybe<FieldSelectorEnum>;
+  readonly id: InputMaybe<FieldSelectorEnum>;
+  readonly internal: InputMaybe<InternalFieldSelector>;
+  readonly parent: InputMaybe<NodeFieldSelector>;
+  readonly tableOfContents: InputMaybe<FieldSelectorEnum>;
+  readonly timeToRead: InputMaybe<FieldSelectorEnum>;
+  readonly wordCount: InputMaybe<MarkdownWordCountFieldSelector>;
+};
+
+type MarkdownRemarkFilterInput = {
+  readonly children: InputMaybe<NodeFilterListInput>;
+  readonly excerpt: InputMaybe<StringQueryOperatorInput>;
+  readonly excerptAst: InputMaybe<JSONQueryOperatorInput>;
+  readonly headings: InputMaybe<MarkdownHeadingFilterListInput>;
+  readonly html: InputMaybe<StringQueryOperatorInput>;
+  readonly htmlAst: InputMaybe<JSONQueryOperatorInput>;
+  readonly id: InputMaybe<StringQueryOperatorInput>;
+  readonly internal: InputMaybe<InternalFilterInput>;
+  readonly parent: InputMaybe<NodeFilterInput>;
+  readonly tableOfContents: InputMaybe<StringQueryOperatorInput>;
+  readonly timeToRead: InputMaybe<IntQueryOperatorInput>;
+  readonly wordCount: InputMaybe<MarkdownWordCountFilterInput>;
+};
+
+type MarkdownRemarkGroupConnection = {
+  readonly distinct: ReadonlyArray<Scalars['String']>;
+  readonly edges: ReadonlyArray<MarkdownRemarkEdge>;
+  readonly field: Scalars['String'];
+  readonly fieldValue: Maybe<Scalars['String']>;
+  readonly group: ReadonlyArray<MarkdownRemarkGroupConnection>;
+  readonly max: Maybe<Scalars['Float']>;
+  readonly min: Maybe<Scalars['Float']>;
+  readonly nodes: ReadonlyArray<MarkdownRemark>;
+  readonly pageInfo: PageInfo;
+  readonly sum: Maybe<Scalars['Float']>;
+  readonly totalCount: Scalars['Int'];
+};
+
+
+type MarkdownRemarkGroupConnection_distinctArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkGroupConnection_groupArgs = {
+  field: MarkdownRemarkFieldSelector;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+};
+
+
+type MarkdownRemarkGroupConnection_maxArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkGroupConnection_minArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+
+type MarkdownRemarkGroupConnection_sumArgs = {
+  field: MarkdownRemarkFieldSelector;
+};
+
+type MarkdownRemarkSortInput = {
+  readonly children: InputMaybe<NodeSortInput>;
+  readonly excerpt: InputMaybe<SortOrderEnum>;
+  readonly excerptAst: InputMaybe<SortOrderEnum>;
+  readonly headings: InputMaybe<MarkdownHeadingSortInput>;
+  readonly html: InputMaybe<SortOrderEnum>;
+  readonly htmlAst: InputMaybe<SortOrderEnum>;
+  readonly id: InputMaybe<SortOrderEnum>;
+  readonly internal: InputMaybe<InternalSortInput>;
+  readonly parent: InputMaybe<NodeSortInput>;
+  readonly tableOfContents: InputMaybe<SortOrderEnum>;
+  readonly timeToRead: InputMaybe<SortOrderEnum>;
+  readonly wordCount: InputMaybe<MarkdownWordCountSortInput>;
+};
+
+type MarkdownWordCount = {
+  readonly paragraphs: Maybe<Scalars['Int']>;
+  readonly sentences: Maybe<Scalars['Int']>;
+  readonly words: Maybe<Scalars['Int']>;
+};
+
+type MarkdownWordCountFieldSelector = {
+  readonly paragraphs: InputMaybe<FieldSelectorEnum>;
+  readonly sentences: InputMaybe<FieldSelectorEnum>;
+  readonly words: InputMaybe<FieldSelectorEnum>;
+};
+
+type MarkdownWordCountFilterInput = {
+  readonly paragraphs: InputMaybe<IntQueryOperatorInput>;
+  readonly sentences: InputMaybe<IntQueryOperatorInput>;
+  readonly words: InputMaybe<IntQueryOperatorInput>;
+};
+
+type MarkdownWordCountSortInput = {
+  readonly paragraphs: InputMaybe<SortOrderEnum>;
+  readonly sentences: InputMaybe<SortOrderEnum>;
+  readonly words: InputMaybe<SortOrderEnum>;
+};
+
 type Mdx = Node & {
   readonly body: Maybe<Scalars['String']>;
   readonly children: ReadonlyArray<Node>;
@@ -1501,6 +1738,7 @@ type Query = {
   readonly allDirectory: DirectoryConnection;
   readonly allFile: FileConnection;
   readonly allImageSharp: ImageSharpConnection;
+  readonly allMarkdownRemark: MarkdownRemarkConnection;
   readonly allMdx: MdxConnection;
   readonly allSite: SiteConnection;
   readonly allSiteBuildMetadata: SiteBuildMetadataConnection;
@@ -1510,6 +1748,7 @@ type Query = {
   readonly directory: Maybe<Directory>;
   readonly file: Maybe<File>;
   readonly imageSharp: Maybe<ImageSharp>;
+  readonly markdownRemark: Maybe<MarkdownRemark>;
   readonly mdx: Maybe<Mdx>;
   readonly site: Maybe<Site>;
   readonly siteBuildMetadata: Maybe<SiteBuildMetadata>;
@@ -1540,6 +1779,14 @@ type Query_allImageSharpArgs = {
   limit: InputMaybe<Scalars['Int']>;
   skip: InputMaybe<Scalars['Int']>;
   sort: InputMaybe<ReadonlyArray<InputMaybe<ImageSharpSortInput>>>;
+};
+
+
+type Query_allMarkdownRemarkArgs = {
+  filter: InputMaybe<MarkdownRemarkFilterInput>;
+  limit: InputMaybe<Scalars['Int']>;
+  skip: InputMaybe<Scalars['Int']>;
+  sort: InputMaybe<ReadonlyArray<InputMaybe<MarkdownRemarkSortInput>>>;
 };
 
 
@@ -1686,6 +1933,22 @@ type Query_imageSharpArgs = {
   original: InputMaybe<ImageSharpOriginalFilterInput>;
   parent: InputMaybe<NodeFilterInput>;
   resize: InputMaybe<ImageSharpResizeFilterInput>;
+};
+
+
+type Query_markdownRemarkArgs = {
+  children: InputMaybe<NodeFilterListInput>;
+  excerpt: InputMaybe<StringQueryOperatorInput>;
+  excerptAst: InputMaybe<JSONQueryOperatorInput>;
+  headings: InputMaybe<MarkdownHeadingFilterListInput>;
+  html: InputMaybe<StringQueryOperatorInput>;
+  htmlAst: InputMaybe<JSONQueryOperatorInput>;
+  id: InputMaybe<StringQueryOperatorInput>;
+  internal: InputMaybe<InternalFilterInput>;
+  parent: InputMaybe<NodeFilterInput>;
+  tableOfContents: InputMaybe<StringQueryOperatorInput>;
+  timeToRead: InputMaybe<IntQueryOperatorInput>;
+  wordCount: InputMaybe<MarkdownWordCountFilterInput>;
 };
 
 

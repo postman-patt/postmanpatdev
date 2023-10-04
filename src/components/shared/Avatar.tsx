@@ -12,7 +12,7 @@ const Avatar = (props: AvatarProps): React.ReactElement => {
   const { image, className } = props
 
   const data = useStaticQuery(graphql`
-    query MyQuery {
+    query myImage {
       allImageSharp(filter: { fixed: { originalName: { eq: "pv.jpg" } } }) {
         nodes {
           gatsbyImageData(quality: 100, layout: CONSTRAINED, width: 500)

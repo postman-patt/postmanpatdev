@@ -1,13 +1,13 @@
 import React from "react"
 import BlogScreen from "../components/screens/BlogScreen"
-import { graphql } from "gatsby"
+import { graphql, PageProps } from "gatsby"
 
 interface BlogProps {
-  data: any
+  data: PageProps<Queries.BlogPageQuery>
 }
 
-export const BlogPageQuery = graphql`
-  query BlogPageQuery {
+export const BlogPage = graphql`
+  query BlogPage {
     allMdx {
       edges {
         node {

@@ -1,14 +1,14 @@
 import * as React from "react"
 import PostScreen from "../components/screens/PostScreen"
-import { graphql } from "gatsby"
+import { graphql, PageProps } from "gatsby"
 
 interface BlogPostProps {
-  data: any
+  data: PageProps<Queries.PostTemplateQuery>
   children: React.ReactNode
 }
 
-export const PostQuery = graphql`
-  query PostTemplateQuery($slug: String!) {
+export const query = graphql`
+  query PostTemplate($slug: String!) {
     mdx(frontmatter: { slug: { eq: $slug } }) {
       id
       body

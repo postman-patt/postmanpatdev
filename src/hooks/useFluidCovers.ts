@@ -2,7 +2,7 @@ import { graphql, useStaticQuery } from 'gatsby';
 
 export const useFluidCovers = () => {
   const images = useStaticQuery(graphql`
-    query UseImagesQuery {
+    query UseImages {
       allFile(
         filter: {sourceInstanceName: {eq: "images"}}
       ) {

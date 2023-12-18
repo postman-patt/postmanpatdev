@@ -25,12 +25,34 @@ export const projects: ProjectType[] = [
     }, 
     {    
         id: "3",
-        projectName: 'Postmanpat.dev',
+        projectName: 'postmanpat.dev',
         summary: 'As part of the Cloud Resume Challenge, I designed and developed a personal website showcasing my skills, projects, and professional experience.\n\n This project served as a comprehensive demonstration of my expertise in various areas of AWS architecture and cloud technologies.',
         image: { src: 'pv.jpg', caption: 'Placeholder' }, 
         startDate: 'Jan 2020',
         endDate: 'Current',
         tags: ['Website', 'AWS', 'Cloud Resume'],
+        githubURL: "google.com"
+    },
+    {    
+        id: "4",
+        projectName: 'Alogorithms and Data Structures',
+        summary: 'Lorem Ipsum',
+        image: { src: '', caption: '' }, 
+        startDate: '',
+        endDate: '',
+        tags: [],
+        demoURL: "google.com", 
+        githubURL: "google.com"
+    },
+    {    
+        id: "5",
+        projectName: 'Automation Boilerplate',
+        summary: 'Lorem Ipsum',
+        image: { src: '', caption: '' }, 
+        startDate: '',
+        endDate: '',
+        tags: [],
+        demoURL: "google.com", 
         githubURL: "google.com"
     }
 ]

@@ -5,7 +5,7 @@ const NavBar = (): React.ReactElement => {
   const links = Object.values(routes).map(
     (route: Routes): React.ReactElement => {
       return (
-        <li className="ml-5 text-xs uppercase" key={route.name}>
+        <li className="md:ml-8 ml-3 text-xs uppercase" key={route.name}>
           <a href={route.path}>{route.name}</a>
         </li>
       )

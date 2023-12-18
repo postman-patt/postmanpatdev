@@ -24,6 +24,12 @@ const config: GatsbyConfig = {
     __key: "images"
   }, 
   {
+    resolve: `gatsby-plugin-s3`,
+    options: {
+      bucketName: "postmanpat-dev",
+    },
+  },
+  {
     resolve: `gatsby-transformer-remark`,
     options: {
       plugins: [

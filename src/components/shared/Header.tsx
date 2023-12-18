@@ -1,5 +1,5 @@
-import React from 'react'
-import NavBar from './NavBar'
+import React from "react"
+import NavBar from "./NavBar"
 
 interface HeaderProps {
   className: string
@@ -10,10 +10,10 @@ const Header = (props: HeaderProps): React.ReactElement => {
 
   return (
     <header className={`flex flex-row justify-items-center pt-8 ${className}`}>
-      <div className='mr-6 font-extrabold text-sm'>
-        <h1>POSTMANPAT.DEV</h1>
+      <div className="mr-6 font-extrabold text-sm">
+        <a href="/">POSTMANPAT.DEV</a>
       </div>
-      <nav className='flex flex-row items-end'>
+      <nav className="flex flex-row items-end">
         <NavBar />
       </nav>
     </header>

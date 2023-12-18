@@ -11,7 +11,7 @@ const Footer = (props: FooterProps): React.ReactElement => {
 
   return (
     <footer>
-      <div className="flex flex-row justify-center space-x-4">
+      <div className="flex flex-row justify-center space-x-4 mb-5">
         <a href="https://github.com/postman-patt/">
           <AiFillGithub
             size={40}

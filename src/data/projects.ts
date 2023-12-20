@@ -8,7 +8,7 @@ export const projects: ProjectType[] = [
         image: { src: '', caption: '' }, 
         startDate: 'Jan 2020',
         endDate: 'Jan 2021',
-        tags: ['EC2', 'MongoDB' ,  'CRUD', 'Social', 'AWS'],
+        tags: ['EC2', 'MongoDB' , 'CRUD', 'Social', 'AWS'],
         demoURL: "google.com", 
         githubURL: "google.com"
     }, 

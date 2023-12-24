@@ -28,11 +28,8 @@ const Project = (props: ProjectProps): React.ReactElement => {
   ) : null
 
   const projectCover = project?.image ? (
-    <div className="transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-105 h-48 bg-cover bg-gray-200 overflow-hidden block  cursor-pointer">
-      <FluidImage
-        image={project.image}
-        className="rounded-t-xl object-contain"
-      />
+    <div className="transition duration-200 ease-in-out transform  hover:-translate-y-1 hover:scale-105 h-48 bg-cover bg-gray-200 overflow-hidden block  cursor-pointer">
+      <FluidImage image={project.image} className=" object-contain" />
     </div>
   ) : null
 

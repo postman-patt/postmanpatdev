@@ -18,11 +18,7 @@ const BlogScreen = (props: BlogScreenProps): React.ReactElement => {
   })
 
   const blogPostElements = posts.allMdx.edges.map((post: any) => {
-    return (
-      <a href={post.node.frontmatter.slug}>
-        <BlogPreview post={post.node} key={post.id} />
-      </a>
-    )
+    return <BlogPreview post={post.node} key={post.node.id} />
   })
 
   return (

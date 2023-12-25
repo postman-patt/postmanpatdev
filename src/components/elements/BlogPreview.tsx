@@ -36,8 +36,8 @@ const BlogPreview = (props: BlogPreviewProps): React.ReactElement => {
     </div>
   ) : null
 
-  const titleElement = post.frontmatter.title ? (
-    <div className="flex flex-row">
+  return (
+    <a href={post.frontmatter.slug} className="flex flex-row">
       <div className="transition duration-200 ease-in-out transform  hover:-translate-x-1 overflow-hidden hover:scale-105 w-64 bg-cover bg-gray-200 block cursor-pointer">
         {cover}
       </div>
@@ -46,10 +46,8 @@ const BlogPreview = (props: BlogPreviewProps): React.ReactElement => {
         {date}
         {summary}
       </div>
-    </div>
-  ) : null
-
-  return <Card>{titleElement}</Card>
+    </a>
+  )
 }
 
 export default BlogPreview

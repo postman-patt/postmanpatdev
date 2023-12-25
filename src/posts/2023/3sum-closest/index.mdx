@@ -1,0 +1,70 @@
+---
+title: "3Sum Closest"
+
+summary: "LeetCode question 16. 3Sum Closest - using two-pointer method"
+
+slug: /3sum-closest
+
+cover: assets/leetcode_post.png
+
+date: 2023-05-11
+---
+# 16. 3Sum Closest
+
+[3Sum Closest - LeetCode](https://leetcode.com/problems/3sum-closest/)
+
+Using two-pointer method. 
+
+Loop through sorted list and initialise a left and right point after the current iteration. 
+
+For example: 
+
+Given a list of *nums*
+
+If *i = 0*, initialise *left = i +1* and *right = len(nums) - 1*
+
+If sum of i, left and right is less than target, then increase left pointer by 1
+
+If sum of i, left and right is greater than target, then decrease right pointer by 1
+
+Loop through entire list and you will find the closest to target
+
+If sum of i, left and right == target, then end the loop early and return sum
+
+```python
+# 16. 3Sum Closest
+
+def threeSumClosest(nums, target):
+
+    sorted_nums = sorted(nums)
+    diff = float("inf")
+    res = 0
+
+    for i in range(len(sorted_nums)):
+
+        # Initialize left and right pointer
+        left = i + 1
+        right = len(sorted_nums) - 1
+
+        while left < right:
+            total = sorted_nums[i] + sorted_nums[left] + sorted_nums[right]
+
+            # Check if the difference is greater than previous results
+            if abs(total - target) < diff:
+                res = total
+                diff = abs(total - target)
+
+            # If total == target the end loop prematurely and return total
+            if total == target:
+                return total
+
+            # If total is less than target then increment left pointer, if greater then decrement right pointer
+            if total < target:
+                left += 1
+            elif total > target:
+                right -= 1
+
+    return res
+
+print(threeSumClosest([-1, 2, 1, -4], 1))
+```

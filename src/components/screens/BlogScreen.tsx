@@ -10,6 +10,13 @@ interface BlogScreenProps {
 const BlogScreen = (props: BlogScreenProps): React.ReactElement => {
   const { posts } = props
 
+  // Order posts
+  posts.allMdx.edges.sort((a: any, b: any) => {
+    return (
+      Date.parse(b.node.frontmatter.date) - Date.parse(a.node.frontmatter.date)
+    )
+  })
+
   const blogPostElements = posts.allMdx.edges.map((post: any) => {
     return (
       <a href={post.node.frontmatter.slug}>
@@ -21,7 +28,7 @@ const BlogScreen = (props: BlogScreenProps): React.ReactElement => {
   return (
     <PageLayout>
       <div className="flex flex-row mb-6">
-        <div className="antialiased text-3xl font-bold">
+        <div className="antialiased text-3xl font-bold tracking-normal">
           <h1>BLOG</h1>
         </div>
         <div className="ml-3">

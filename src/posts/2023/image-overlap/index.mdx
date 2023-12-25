@@ -1,0 +1,71 @@
+---
+title: "Image Overlap"
+
+summary: "LeetCode question 835. Image Overlap"
+
+slug: /image-overlap
+
+cover: assets/leetcode_post.png
+
+date: 2023-05-30
+---
+# 835. Image Overlap
+
+[Image Overlap - LeetCode](https://leetcode.com/problems/image-overlap/)
+
+Find all the positions (tuple) of 1’s in both img1 and img2 and append to lists A and B respecitvely.
+
+Loop through and compare all positions of A to positions in B. Find the translation of each position in A to position in B and store result in a hashmap. This will determine which positions in A and B have common translations when overlapped. 
+
+**For example:**
+
+Given `img1 = [[1,1,0],[0,1,0],[0,1,0]], img2 = [[0,0,0],[0,1,1],[0,0,1]]`
+
+The positions of the 1’s are given by A = [(0, 0), (0, 1), (1, 1), (2, 1)], B = [(1, 1), (1, 2), (2, 2)]
+
+When comparing A[0] to B[0], the translation is (1, 1) 
+
+We then store the tuple into a hashmap my_dict[(1, 1)] = 1
+
+This tells us that when there is a transaltion fo (1, 1) there is going to be 1 overlap
+
+We then continue and loop through all A and B and add to the count for each transaltion
+
+```python
+def largestOverlap(img1, img2):
+
+# Position of all 1's in img1
+    A = [
+        (row, col)
+        for row in range(len(img1))
+        for col in range(len(img1))
+        if img1[row][col] == 1
+    ]
+
+# Position of all 1's in img2
+    B = [
+        (row, col)
+        for row in range(len(img2))
+        for col in range(len(img2))
+        if img2[row][col] == 1
+    ]
+
+    my_dict = {}
+
+    for i in A:
+        for j in B:
+            # translation comparing i to j
+            t = (j[0] - i[0], j[1] - i[1])
+
+            # store translation in hashmap as a count, add to the count when the same translatipon is found
+            if t in my_dict:
+                my_dict[t] += 1
+            else:
+                my_dict[t] = 1
+
+    # Check that my_dict is not emtpy. Need to account for the fact that there may be no overlaps at all
+    if my_dict.values():
+        return max(my_dict.values())
+    else:
+        return 0
+```

@@ -13,11 +13,23 @@ export const BlogPage = graphql`
         node {
           id
           frontmatter {
-            cover
-            date
+            date(formatString: "DD MMMM, YYYY")
             summary
             title
             slug
+            cover {
+              childImageSharp {
+                gatsbyImageData(
+                  layout: FULL_WIDTH
+                  quality: 95
+                  transformOptions: {
+                    fit: COVER
+                    cropFocus: CENTER
+                    grayscale: false
+                  }
+                )
+              }
+            }
           }
         }
       }

@@ -18,7 +18,7 @@ const ProjectScreen = (props: ProjectScreenProps): React.ReactElement => {
   return (
     <PageLayout>
       <div className="flex flex-row mb-6">
-        <div className="antialiased text-3xl font-semibold">
+        <div className="antialiased text-3xl font-bold tracking-normal">
           <h1>PROJECTS</h1>
         </div>
         <div className="ml-3">

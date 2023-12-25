@@ -11,13 +11,17 @@ const BlogScreen = (props: BlogScreenProps): React.ReactElement => {
   const { posts } = props
 
   const blogPostElements = posts.allMdx.edges.map((post: any) => {
-    return <BlogPreview post={post.node} key={post.id} />
+    return (
+      <a href={post.node.frontmatter.slug}>
+        <BlogPreview post={post.node} key={post.id} />
+      </a>
+    )
   })
 
   return (
     <PageLayout>
       <div className="flex flex-row mb-6">
-        <div className="antialiased text-3xl font-semibold">
+        <div className="antialiased text-3xl font-bold">
           <h1>BLOG</h1>
         </div>
         <div className="ml-3">

@@ -1575,7 +1575,7 @@ type MdxFilterListInput = {
 };
 
 type MdxFrontmatter = {
-  readonly cover: Maybe<Scalars['String']>;
+  readonly cover: Maybe<File>;
   readonly date: Maybe<Scalars['Date']>;
   readonly slug: Maybe<Scalars['String']>;
   readonly summary: Maybe<Scalars['String']>;
@@ -1591,7 +1591,7 @@ type MdxFrontmatter_dateArgs = {
 };
 
 type MdxFrontmatterFieldSelector = {
-  readonly cover: InputMaybe<FieldSelectorEnum>;
+  readonly cover: InputMaybe<FileFieldSelector>;
   readonly date: InputMaybe<FieldSelectorEnum>;
   readonly slug: InputMaybe<FieldSelectorEnum>;
   readonly summary: InputMaybe<FieldSelectorEnum>;
@@ -1599,7 +1599,7 @@ type MdxFrontmatterFieldSelector = {
 };
 
 type MdxFrontmatterFilterInput = {
-  readonly cover: InputMaybe<StringQueryOperatorInput>;
+  readonly cover: InputMaybe<FileFilterInput>;
   readonly date: InputMaybe<DateQueryOperatorInput>;
   readonly slug: InputMaybe<StringQueryOperatorInput>;
   readonly summary: InputMaybe<StringQueryOperatorInput>;
@@ -1607,7 +1607,7 @@ type MdxFrontmatterFilterInput = {
 };
 
 type MdxFrontmatterSortInput = {
-  readonly cover: InputMaybe<SortOrderEnum>;
+  readonly cover: InputMaybe<FileSortInput>;
   readonly date: InputMaybe<SortOrderEnum>;
   readonly slug: InputMaybe<SortOrderEnum>;
   readonly summary: InputMaybe<SortOrderEnum>;
@@ -2831,7 +2831,7 @@ type WebPOptions = {
 type BlogPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-type BlogPageQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly frontmatter: { readonly cover: string | null, readonly date: string | null, readonly summary: string | null, readonly title: string | null, readonly slug: string | null } | null } }> } };
+type BlogPageQuery = { readonly allMdx: { readonly edges: ReadonlyArray<{ readonly node: { readonly id: string, readonly frontmatter: { readonly date: string | null, readonly summary: string | null, readonly title: string | null, readonly slug: string | null, readonly cover: { readonly childImageSharp: { readonly gatsbyImageData: import('gatsby-plugin-image').IGatsbyImageData } | null } | null } | null } }> } };
 
 type GatsbyImageSharpFixedFragment = { readonly base64: string | null, readonly width: number, readonly height: number, readonly src: string, readonly srcSet: string };
 

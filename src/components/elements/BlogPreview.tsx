@@ -1,5 +1,7 @@
 import React from "react"
 import Card from "../shared/Card"
+import FluidImage from "../shared/FluidImage"
+import { BiCalendar } from "@react-icons/all-files/Bi/BiCalendar"
 
 interface BlogPreviewProps {
   post: any
@@ -8,11 +10,43 @@ interface BlogPreviewProps {
 const BlogPreview = (props: BlogPreviewProps): React.ReactElement => {
   const { post } = props
 
+  const cover = post.frontmatter.cover ? (
+    <FluidImage
+      fluidImage={post.frontmatter.cover.childImageSharp.gatsbyImageData}
+      className="object-contain"
+    />
+  ) : null
+
+  const title = post.frontmatter.title ? (
+    <div className="text-xl">
+      <h1>{post.frontmatter?.title}</h1>
+    </div>
+  ) : null
+
+  const date = post.frontmatter.date ? (
+    <div className="flex flex-row items-center my-3 font-light text-xs text-gray-500">
+      <BiCalendar size={20} className="fill-gray-500 mr-2" />
+      <p>{post.frontmatter.date}</p>
+    </div>
+  ) : null
+
+  const summary = post.frontmatter.summary ? (
+    <div className="pt-1 font-light text-base whitespace-pre-line">
+      <p>{post.frontmatter?.summary}</p>
+    </div>
+  ) : null
+
   const titleElement = post.frontmatter.title ? (
-    <>
-      <h1>{post.frontmatter.title}</h1>
-      <a href={post.frontmatter.slug}>Link to the Post</a>
-    </>
+    <div className="flex flex-row">
+      <div className="transition duration-200 ease-in-out transform  hover:-translate-x-1 overflow-hidden hover:scale-105 w-64 bg-cover bg-gray-200 block cursor-pointer">
+        {cover}
+      </div>
+      <div className="px-8 py-4">
+        {title}
+        {date}
+        {summary}
+      </div>
+    </div>
   ) : null
 
   return <Card>{titleElement}</Card>

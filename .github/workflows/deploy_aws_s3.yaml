@@ -17,7 +17,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "16.x"
+          node-version: "18.x"
 
       - name: Install Project Dependencies
         run: npm ci --force
@@ -39,4 +39,4 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: test deploy
-        run: npm run develop
+        run: npm run build

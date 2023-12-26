@@ -1,0 +1,33 @@
+name: Deploy to AWS S3
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy postmanpat website
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "13.x"
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Install Gatsby CLI
+        run: npm install -g gatsby-cli@2.12.34
+
+      -name: Configure AWS CLI Credentials
+        run: aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" && aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" && aws configure set region "$AWS_DEFAULT_REGION" && aws configure set output "json"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
+        
+      -name: test deploy
+        run: npm run build

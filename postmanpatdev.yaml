@@ -1,0 +1,66 @@
+Description: Deploy postmanpat.dev to S3
+
+Resources:
+  postmanpatS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "postmanpatdev"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+        ErrorDocument: "error.html"
+
+  postmanpatUser:
+    Type: "AWS::IAM::User"
+
+  postmanpatUserPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "postmanpatUserPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+				      - "s3:GetObject"
+				      - "s3:PutObject"
+				      - "s3:ListBucket"
+				      - "s3:DeleteObject"
+				      - "S3:PutBucketAcl"
+				      - "s3:GetBucketLocation"
+				      - "s3:PutBucketWebsite"
+				      - "S3:PutObjectAcl"
+            Resource:
+              - !Sub "arn:aws:s3:::${postmanpatS3Bucket}"
+              - !Sub "arn:aws:s3:::${postmanpatS3Bucket}/*"
+      Users:
+        - !Ref postmanpatUser
+
+  postmanpatAccessKey:
+    Type: "AWS::IAM::AccessKey"
+    Properties:
+      UserName: !Ref postmanpatUser
+
+Outputs:
+  S3BucketName:
+    Description: "Name of the created S3 bucket"
+    Value: !Ref postmanpatS3Bucket
+
+  S3StaticWebsiteURL:
+    Description: "URL of the static website hosted in the S3 bucket"
+    Value: !Sub "http://${postmanpatS3Bucket}.s3-website-${AWS::Region}.amazonaws.com/"
+
+  UserAccessKeyId:
+    Value: !Ref postmanpatAccessKey
+    Description: "Access Key ID for the IAM user"
+
+  UserSecretKey:
+    Value: !GetAtt postmanpatAccessKey.SecretAccessKey
+    Description: "Secret Access Key for the IAM user"

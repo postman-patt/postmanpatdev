@@ -1,6 +1,6 @@
 import * as React from "react"
 import AboutScreen from "../components/screens/AboutScreen"
-import { profile } from "../data/profile"
+import { profile } from "../data/profile_data"
 
 const Index = (): React.ReactElement => {
   return (

@@ -17,10 +17,10 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "latest"
 
       - name: Install Project Dependencies
-        run: npm i --force
+        run: npm ci --force
 
       - name: Install Gatsby CLI
         run: npm install -g gatsby-cli@5.11

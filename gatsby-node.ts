@@ -21,7 +21,7 @@ exports.createPages = async ({ graphql, actions }: any) => {
     result.data.allMdx.nodes.forEach( (node: { frontmatter: any; internal: any;}) => {
       createPage({
         path: node.frontmatter.slug,
-        component: `${path.resolve('./src/templates/Post.tsx')}?__contentFilePath=${node.internal.contentFilePath}`,
+        component: `${path.resolve('./src/templates/PostTemplate.tsx')}?__contentFilePath=${node.internal.contentFilePath}`,
         context: {
           title: node.frontmatter.title,
           slug: node.frontmatter.slug

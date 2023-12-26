@@ -7,9 +7,7 @@ on:
 jobs:
   build-and-deploy:
     name: Build and deploy postmanpat website
-
-    runs-on: windows-latest
-
+    runs-on: ubuntu-latest
     steps:
       - name: Install Node.js
         uses: actions/setup-node@v1

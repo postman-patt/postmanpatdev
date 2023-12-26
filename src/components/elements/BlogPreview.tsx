@@ -1,6 +1,6 @@
 import React from "react"
 import FluidImage from "../shared/FluidImage"
-import { BiCalendar } from "react-icons/Bi"
+import { BiCalendar } from "react-icons/bi"
 
 interface BlogPreviewProps {
   post: any

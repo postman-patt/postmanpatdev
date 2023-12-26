@@ -1,6 +1,6 @@
 name: Deploy to AWS S3
 
-run-name: Deploy postmanpat.dev to S3
+run-name: Deploy postmanpatdev to S3
 
 on:
   push:

@@ -1,5 +1,4 @@
 import React from "react"
-import Card from "../shared/Card"
 import FluidImage from "../shared/FluidImage"
 import { BiCalendar } from "react-icons/Bi"
 

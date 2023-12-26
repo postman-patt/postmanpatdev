@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React from "react"
 import PageLayout from "../layouts/PageLayout"
 import Profile from "../elements/Profile"
 import { ProfileType } from "../../types/ProfileType"

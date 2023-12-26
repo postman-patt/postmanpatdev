@@ -39,4 +39,4 @@ jobs:
           AWS_DEFAULT_REGION: "us-east-1"
 
       - name: test deploy
-        run: npm run build
+        run: npm run develop

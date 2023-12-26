@@ -1,7 +1,7 @@
 import React from "react"
 import Card from "../shared/Card"
 import FluidImage from "../shared/FluidImage"
-import { BiCalendar } from "@react-icons/all-files/Bi/BiCalendar"
+import { BiCalendar } from "react-icons/Bi"
 
 interface BlogPreviewProps {
   post: any

@@ -1,6 +1,6 @@
 import React from "react"
-import { AiFillGithub } from "@react-icons/all-files/Ai/AiFillGithub"
-import { AiFillLinkedin } from "@react-icons/all-files/Ai/AiFillLinkedin"
+import { AiFillGithub } from "react-icons/Ai"
+import { AiFillLinkedin } from "react-icons/Ai"
 
 interface FooterProps {
   className?: string

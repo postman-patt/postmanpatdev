@@ -1,6 +1,6 @@
 import React from "react"
 import { ProfileType } from "../../types/ProfileType"
-import { GoLocation } from "@react-icons/all-files/Go/GoLocation"
+import { GoLocation } from "react-icons/go"
 import Tag from "../shared/Tag"
 import Avatar from "../shared/Avatar"
 

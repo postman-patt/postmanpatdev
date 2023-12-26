@@ -1,6 +1,6 @@
 import React from "react"
 import ProjectScreen from "../components/screens/ProjectScreen"
-import { projects } from "../data/projects_data"
+import { projects } from "../data/projects"
 
 const Projects = () => {
   return (

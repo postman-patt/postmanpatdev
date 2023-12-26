@@ -37,11 +37,13 @@ const BlogPreview = (props: BlogPreviewProps): React.ReactElement => {
   ) : null
 
   return (
-    <a href={post.frontmatter.slug} className="flex flex-row">
-      <div className="transition duration-200 ease-in-out transform  hover:-translate-x-1 overflow-hidden hover:scale-105 w-64 bg-cover bg-gray-200 block cursor-pointer">
-        {cover}
+    <a href={post.frontmatter.slug} className="md:flex flex-row shadow-md">
+      <div className="md:flex overflow-hidden">
+        <div className="transition duration-200 ease-in-out transform hover:-translate-x-1 hover:scale-105 md:w-64 bg-cover bg-gray-200 block cursor-pointer">
+          {cover}
+        </div>
       </div>
-      <div className="px-8 py-4">
+      <div className="flex-1 px-8 py-4">
         {title}
         {date}
         {summary}

@@ -21,7 +21,7 @@ export const projects: ProjectType[] = [
         endDate: 'Jan 2024',
         tags: ['Automation', 'Python', 'Behave', 'POJO', 'POM', 'AWS', 'boto3'],
         demoURL: "", 
-        githubURL: "google.com"
+        githubURL: ""
     }, 
     {    
         id: "3",
@@ -32,7 +32,7 @@ export const projects: ProjectType[] = [
         endDate: 'Dec 2022',
         tags: ['Automation', 'Java', 'TestNG', 'POJO', 'POM'],
         demoURL: "", 
-        githubURL: "google.com"
+        githubURL: ""
     },
     {    
         id: "4",

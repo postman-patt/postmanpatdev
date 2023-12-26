@@ -20,7 +20,7 @@ jobs:
           node-version: "18.x"
 
       - name: Install Project Dependencies
-        run: npm ci --force
+        run: npm i --force
 
       - name: Install Gatsby CLI
         run: npm install -g gatsby-cli@5.11

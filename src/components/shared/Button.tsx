@@ -12,10 +12,10 @@ const Button = (props: ButtonProps): React.ReactElement => {
   return (
     <a
       href={link}
-      className="transition duration-200 ease-in-out flex flex-row items-center hover:bg-black hover:text-white  mr-4 bg-white py-2 px-3 rounded shadow-sm border border-solid border-gray-300"
+      className="transition duration-200 ease-in-out flex flex-row items-center hover:bg-black hover:text-white  mr-4 bg-white py-2 px-3 rounded shadow-sm border border-solid border-gray-30 text-sm sm:text-base"
     >
-      {icon}
-      {text}
+      <div>{icon}</div>
+      <div>{text}</div>
     </a>
   )
 }

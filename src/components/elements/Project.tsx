@@ -37,7 +37,7 @@ const Project = (props: ProjectProps): React.ReactElement => {
     project?.startDate || project?.endDate ? (
       <div className="flex flex-row items-center my-3 font-light text-sm">
         <BiCalendar size={20} className="fill-gray-500 mr-2" />
-        <p>
+        <p className="text-gray-500">
           {project.startDate} → {project.endDate}
         </p>
       </div>
@@ -52,23 +52,19 @@ const Project = (props: ProjectProps): React.ReactElement => {
   ) : null
 
   const demoButton = project?.demoURL ? (
-    <div className="mr-2">
-      <Button
-        text="Demo"
-        link="google.com"
-        icon={<FaPlayCircle size={20} className="mr-2" />}
-      />
-    </div>
+    <Button
+      text="Demo"
+      link="google.com"
+      icon={<FaPlayCircle size={20} className="mr-2" />}
+    />
   ) : null
 
   const sourceButton = project?.githubURL ? (
-    <div>
-      <Button
-        text="Source Code"
-        link="google.com"
-        icon={<AiFillGithub size={20} className="mr-2" />}
-      />
-    </div>
+    <Button
+      text="Source Code"
+      link="google.com"
+      icon={<AiFillGithub size={25} className="mr-2" />}
+    />
   ) : null
 
   return (

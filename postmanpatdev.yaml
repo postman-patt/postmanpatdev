@@ -29,14 +29,14 @@ Resources:
         Statement:
           - Effect: "Allow"
             Action:
-				      - "s3:GetObject"
-				      - "s3:PutObject"
-				      - "s3:ListBucket"
-				      - "s3:DeleteObject"
-				      - "S3:PutBucketAcl"
-				      - "s3:GetBucketLocation"
-				      - "s3:PutBucketWebsite"
-				      - "S3:PutObjectAcl"
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:ListBucket"
+              - "s3:DeleteObject"
+              - "S3:PutBucketAcl"
+              - "s3:GetBucketLocation"
+              - "s3:PutBucketWebsite"
+              - "S3:PutObjectAcl"
             Resource:
               - !Sub "arn:aws:s3:::${postmanpatS3Bucket}"
               - !Sub "arn:aws:s3:::${postmanpatS3Bucket}/*"

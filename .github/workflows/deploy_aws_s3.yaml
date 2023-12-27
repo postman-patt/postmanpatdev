@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    name: Build and deploy postmanpat website
+    name: Build and deploy website
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -33,7 +33,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-east-1"
+          AWS_DEFAULT_REGION: "ap-southeast-2"
 
-      - name: test deploy
+      - name: test variabled
+        run: echo "$AWS_ACCESS_KEY_ID"
+
+      - name: Deploy to S3
         run: npm run build

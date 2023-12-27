@@ -17,7 +17,7 @@ const PageLayout = (props: PageLayoutProps): React.ReactElement | null => {
     <main className="flex flex-col items-center">
       <div className="max-w-screen-xl self-stretch m-auto w-full">
         <Header className="font-sans px-6 py-6" />
-        <article className="px-12 py-6">{children}</article>
+        <article className="px-10 py-6">{children}</article>
         <Footer />
       </div>
     </main>

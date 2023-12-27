@@ -1,6 +1,7 @@
 import React from "react"
 import PageLayout from "../layouts/PageLayout"
 import Post from "../elements/Post"
+import { Helmet } from "react-helmet"
 
 interface PostScreenProps {
   post: any
@@ -12,6 +13,9 @@ const PostScreen = (props: PostScreenProps): React.ReactElement => {
 
   return (
     <PageLayout>
+      <Helmet title="Patrick Vuong | Post">
+        <meta name="description" content="Blog Post" />
+      </Helmet>
       <Post post={post}>{children}</Post>
     </PageLayout>
   )

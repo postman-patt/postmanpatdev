@@ -6,7 +6,7 @@ interface PostProps {
 }
 
 const Post = (props: PostProps): React.ReactElement => {
-  const { post, children } = props
+  const { children } = props
 
   return (
     <article

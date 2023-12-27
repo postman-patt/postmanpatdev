@@ -3,6 +3,7 @@ import PageLayout from "../layouts/PageLayout"
 import { ProjectType } from "../../types/ProjectType"
 import Project from "../elements/Project"
 import Tag from "../shared/Tag"
+import { Helmet } from "react-helmet"
 
 interface ProjectScreenProps {
   projects: ProjectType[]
@@ -17,6 +18,9 @@ const ProjectScreen = (props: ProjectScreenProps): React.ReactElement => {
 
   return (
     <PageLayout>
+      <Helmet title="Patrick Vuong | Projects">
+        <meta name="description" content="Projects" />
+      </Helmet>
       <div className="flex flex-row mb-6">
         <div className="antialiased text-3xl font-bold tracking-normal">
           <h1>PROJECTS</h1>

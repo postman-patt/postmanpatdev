@@ -2,6 +2,7 @@ import React from "react"
 import PageLayout from "../layouts/PageLayout"
 import Tag from "../shared/Tag"
 import BlogPreview from "../elements/BlogPreview"
+import { Helmet } from "react-helmet"
 
 interface BlogScreenProps {
   posts: any
@@ -23,6 +24,9 @@ const BlogScreen = (props: BlogScreenProps): React.ReactElement => {
 
   return (
     <PageLayout>
+      <Helmet title="Patrick Vuong | Blog">
+        <meta name="description" content="Blog Posts" />
+      </Helmet>
       <div className="flex flex-row mb-6">
         <div className="antialiased text-3xl font-bold tracking-normal">
           <h1>BLOG</h1>

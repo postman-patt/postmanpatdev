@@ -14,7 +14,9 @@ const Profile = (props: ProfileProps): React.ReactElement => {
   const usernameElement =
     profile?.firstName || profile.lastName ? (
       <h1 className="font-bold tracking-normal text-center md:text-left text-3xl mb-4">
-        {profile.firstName + " " + profile.lastName}
+        {profile.firstName?.toUpperCase() +
+          " " +
+          profile.lastName?.toUpperCase()}
       </h1>
     ) : null
 

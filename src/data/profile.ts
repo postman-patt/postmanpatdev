@@ -1,8 +1,8 @@
 import { ProfileType } from '../types/ProfileType'
 
 export const profile: ProfileType = {
-  firstName: 'PATRICK',
-  lastName: 'VUONG',
+  firstName: 'Patrick',
+  lastName: 'Vuong',
   image: { src: 'pv.jpg', caption: 'Patrick Vuong' },
   position: 'QA Automation Lead | Software Developer',
   summary:

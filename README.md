@@ -27,7 +27,7 @@ npm run develop
 
 ## Deploying to AWS S3
 
-The following is required to run the site to AWS S3:
+The following is required to deploy the site to AWS S3:
 
 - AWS CLI
 - Configured AWS CLI credentials with S3 access

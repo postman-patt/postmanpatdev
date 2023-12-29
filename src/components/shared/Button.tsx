@@ -2,7 +2,7 @@ import React from "react"
 
 interface ButtonProps {
   text: string
-  icon: React.ReactElement
+  icon?: React.ReactElement
   link: string
 }
 

@@ -8,4 +8,5 @@ export interface ProfileType {
     image?: ImageType
     tags?: string[]
     location?: string
+    resumeLink?: string
 }

@@ -54,7 +54,7 @@ const Project = (props: ProjectProps): React.ReactElement => {
   const demoButton = project?.demoURL ? (
     <Button
       text="Demo"
-      link="google.com"
+      link={project.demoURL}
       icon={<FaPlayCircle size={20} className="mr-2" />}
     />
   ) : null
@@ -62,7 +62,7 @@ const Project = (props: ProjectProps): React.ReactElement => {
   const sourceButton = project?.githubURL ? (
     <Button
       text="Source Code"
-      link="google.com"
+      link={project.githubURL}
       icon={<AiFillGithub size={25} className="mr-2" />}
     />
   ) : null

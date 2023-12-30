@@ -9,8 +9,8 @@ export const projects: ProjectType[] = [
         startDate: 'Jan 2020',
         endDate: 'Current',
         tags: ['Algorithms', 'Data Structures', 'Python', 'JavaScript', 'Competitive Programming'],
-        demoURL: "google.com", 
-        githubURL: "google.com"
+        demoURL: "", 
+        githubURL: "https://github.com/postman-patt/algorithms-and-data-structures"
     },
     {    
         id: "2",
@@ -42,8 +42,8 @@ export const projects: ProjectType[] = [
         startDate: 'Jan 2020',
         endDate: 'Jan 2021',
         tags: ['EC2', 'MongoDB' , 'CRUD', 'Social', 'AWS'],
-        demoURL: "google.com", 
-        githubURL: "google.com"
+        demoURL: "", 
+        githubURL: "https://github.com/postman-patt/baddy-social-manager"
     }, 
     {    
         id: "5",
@@ -53,8 +53,8 @@ export const projects: ProjectType[] = [
         startDate: 'Jan 2021',
         endDate: 'Jan 2021',
         tags: ['EC2', 'Real Time' ,  'Socket.IO', 'Game', 'AWS'],
-        demoURL: "google.com", 
-        githubURL: "google.com"
+        demoURL: "", 
+        githubURL: "https://github.com/postman-patt/the-mind"
     }, 
     {    
         id: "6",
@@ -64,6 +64,7 @@ export const projects: ProjectType[] = [
         startDate: 'Jan 2020',
         endDate: 'Current',
         tags: ['Website', 'AWS', 'Cloud Resume'],
-        githubURL: "google.com"
+        demoURL:"https://postmanpat.dev/",
+        githubURL: "https://github.com/postman-patt/postmanpatdev"
     }
 ]

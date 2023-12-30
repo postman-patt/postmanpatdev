@@ -55,7 +55,7 @@ const Profile = (props: ProfileProps): React.ReactElement => {
     </div>
   ) : null
 
-  const social = profile?.resumeLink ? (
+  const social = (
     <div className="flex flex-row justify-center md:justify-start space-x-3 mb-5">
       <a href="https://github.com/postman-patt/">
         <AiFillGithub
@@ -70,7 +70,7 @@ const Profile = (props: ProfileProps): React.ReactElement => {
         />
       </a>
     </div>
-  ) : null
+  )
 
   const certifications = (
     <div className="grid justify-items-center grid-cols-2 md:grid-cols-5 mt-5">

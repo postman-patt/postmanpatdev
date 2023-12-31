@@ -5,7 +5,7 @@ import Tag from "../shared/Tag"
 import Avatar from "../shared/Avatar"
 import Button from "../shared/Button"
 import { AiFillGithub, AiFillLinkedin } from "react-icons/ai"
-import FluidImage from "../shared/FluidImage"
+import Certification from "../shared/Certification"
 
 interface ProfileProps {
   profile: ProfileType
@@ -29,7 +29,7 @@ const Profile = (props: ProfileProps): React.ReactElement => {
   ) : null
 
   const positionElement = profile?.position ? (
-    <h1 className="font-light text-lg text-center md:text-left mb-5">
+    <h1 className="font-light text-lg text-center md:text-left mb-4">
       {profile.position}
     </h1>
   ) : null
@@ -72,50 +72,19 @@ const Profile = (props: ProfileProps): React.ReactElement => {
     </div>
   )
 
-  const certifications = (
-    <div className="grid justify-items-center grid-cols-2 md:grid-cols-5 mt-5">
-      <div
-        data-iframe-width="150"
-        data-iframe-height="270"
-        data-share-badge-id="80ae0cd0-73e3-4a9e-bd0b-7a444b3710b2"
-        data-share-badge-host="https://www.credly.com"
-        className="justify-center"
-      ></div>
-      <div
-        data-iframe-width="150"
-        data-iframe-height="270"
-        data-share-badge-id="9d5f0150-65d8-466a-82af-2182d62ad8a7"
-        data-share-badge-host="https://www.credly.com"
-      ></div>
-      <div
-        data-iframe-width="150"
-        data-iframe-height="270"
-        data-share-badge-id="76a6c475-4f30-4e90-9151-fd6904d52702"
-        data-share-badge-host="https://www.credly.com"
-      ></div>
-      <div className="my-auto w-36">
-        <FluidImage
-          image={{
-            src: "istqb_foundation.png",
-            caption: "ISTQB Foundation Certified",
-          }}
-          className="object-cover"
-        />
-      </div>
-      <div className="my-auto w-36">
-        <FluidImage
-          image={{
-            src: "isqi_agile_essentials.png",
-            caption: "iSQI Agile Essentials Certified",
-          }}
-          className="object-contain"
-        />
-      </div>
-    </div>
-  )
+  const certifications = profile.certifications
+    ? profile.certifications.map((certification) => {
+        return (
+          <Certification
+            image={certification.image}
+            link={certification.link}
+          />
+        )
+      })
+    : null
 
   const summaryElement = profile?.summary ? (
-    <p className="font-light whitespace-pre-wrap my-5">{profile.summary}</p>
+    <p className="font-light whitespace-pre-wrap mb-6">{profile.summary}</p>
   ) : null
 
   return (
@@ -134,8 +103,8 @@ const Profile = (props: ProfileProps): React.ReactElement => {
         </div>
       </div>
       <div>{summaryElement}</div>
-      <hr className="rounded" />
-      <div>{certifications}</div>
+      <hr className="rounded mb-2" />
+      <div className="grid grid-cols-2 md:grid-cols-5">{certifications}</div>
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { CertificationType } from './CertificationType'
 import { ImageType } from './ImageType'
 
 export interface ProfileType {
@@ -9,4 +10,5 @@ export interface ProfileType {
     tags?: string[]
     location?: string
     resumeLink?: string
+    certifications?: CertificationType[]
 }

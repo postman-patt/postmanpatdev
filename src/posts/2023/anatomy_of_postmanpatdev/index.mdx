@@ -1,0 +1,139 @@
+---
+title: "Anatomy of postmanpat.dev"
+
+summary: "CI/CD Deployment Architecture of this website"
+
+slug: /anatomy_of_postmanpatdev
+
+cover: assets/postmanpat_architecture.png
+
+date: 2024-01-01
+---
+# Anatomy of postmanpat.dev
+
+As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, the objective was setup a simple, quick and easy pipeline for a Gatsby site. As such I found the following solution to be the most simple and cost efficient. 
+
+## CI/CD Architecture
+
+![postmanpat_architecture.png](assets/postmanpat_architecture.png)
+
+- postmanpat.dev is hosted on Amazon S3 bucket with a CI/CD pipeline utulizing Github actions to build, compile and deploy via an Ubuntu instance.
+- Upon new pushes to the main repository, Github actions will trigger a new page build and automatically deploy to S3.
+
+## GitHub Workflow File
+
+```yaml
+name: Deploy to AWS S3
+
+run-name: Deploy postmanpatdev to S3
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy website
+
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: "ap-southeast-2"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+
+      - name: Install Project Dependencies
+        run: npm i --force
+
+      - name: Install Gatsby CLI
+        run: npm install -g gatsby-cli@^5.11
+
+      - name: Install Gatsby Plugin S3
+        run: npm install gatsby-plugin-s3 --force
+
+      - name: Configure AWS CLI Credentials
+        run: aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" && aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" && aws configure set region "$AWS_DEFAULT_REGION" && aws configure set output "json"
+
+      - name: Deploy to S3
+        run: npm run build && npm run deploy
+```
+
+## Cloudformation Template
+
+```yaml
+Description: Deploy postmanpat.dev to S3
+
+Resources:
+  postmanpatS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "postmanpatdev"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+        ErrorDocument: "error.html"
+
+  postmanpatUser:
+    Type: "AWS::IAM::User"
+
+  postmanpatUserPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "postmanpatUserPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "s3:GetObject"
+              - "s3:PutObject"
+              - "s3:ListBucket"
+              - "s3:DeleteObject"
+              - "S3:PutBucketAcl"
+              - "s3:GetBucketLocation"
+              - "s3:PutBucketWebsite"
+              - "S3:PutObjectAcl"
+            Resource:
+              - !Sub "arn:aws:s3:::${postmanpatS3Bucket}"
+              - !Sub "arn:aws:s3:::${postmanpatS3Bucket}/*"
+      Users:
+        - !Ref postmanpatUser
+
+  postmanpatAccessKey:
+    Type: "AWS::IAM::AccessKey"
+    Properties:
+      UserName: !Ref postmanpatUser
+
+Outputs:
+  S3BucketName:
+    Description: "Name of the created S3 bucket"
+    Value: !Ref postmanpatS3Bucket
+
+  S3StaticWebsiteURL:
+    Description: "URL of the static website hosted in the S3 bucket"
+    Value: !Sub "http://${postmanpatS3Bucket}.s3-website-${AWS::Region}.amazonaws.com/"
+
+  UserAccessKeyId:
+    Value: !Ref postmanpatAccessKey
+    Description: "Access Key ID for the IAM user"
+
+  UserSecretKey:
+    Value: !GetAtt postmanpatAccessKey.SecretAccessKey
+    Description: "Secret Access Key for the IAM user"
+```

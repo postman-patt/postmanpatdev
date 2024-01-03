@@ -1,7 +1,7 @@
 ---
-title: "Anatomy of postmanpat.dev"
+title: "The Anatomy of postmanpat.dev"
 
-summary: "CI/CD Deployment Architecture of this website"
+summary: "CI/CD Deployment Architecture of this website. Details the considerations made when choosing a CI/CD pipeline structure that is most fitting for a simple portfolio/blog site. Includes the Infrastructure as Code files used to build and deploy the site via an Ubuntu Instance, as well as the file used to create the necessary AWS resources to host the site"
 
 slug: /anatomy_of_postmanpatdev
 
@@ -11,14 +11,33 @@ date: 2024-01-01
 ---
 # Anatomy of postmanpat.dev
 
-As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, the objective was setup a simple, quick and easy pipeline for a Gatsby site. As such I found the following solution to be the most simple and cost efficient. 
+As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed a simple, quick and easy pipeline for a Gatsby site. The pipeline needed to satisfy the following requirements:
+- Utulize AWS ecosystem
+- Main codebase to reside in GitHub (as oppose to AWS CodeCommit)
+- Able to build and deploy upon push to the repository
+- Cost efficient
+- Low maintenance
+- Secure
+- Simple automatic deployment of resources
+
+In exploring several options, including deployment and hosting via an EC2 instance, I found the following solution to be the most simple and cost efficient, requiring minimal usage and upkeep of AWS resources whilst maintaining the codebase in GitHub.
 
 ## CI/CD Architecture
 
+### Diagram of postmanpat.dev CI/CD 
 ![postmanpat_architecture.png](assets/postmanpat_architecture.png)
 
-- postmanpat.dev is hosted on Amazon S3 bucket with a CI/CD pipeline utulizing Github actions to build, compile and deploy via an Ubuntu instance.
-- Upon new pushes to the main repository, Github actions will trigger a new page build and automatically deploy to S3.
+postmanpat.dev is hosted on Amazon S3 bucket with a CI/CD pipeline utulizing Github Workflows to build, compile and deploy to S3 via an Ubuntu instance. Upon new pushes or merges to the main repository, the GitHub Workflow will trigger a new page build and automatically deploy to the S3 bucket. The content is then served via AWS Cloudfront (S3 Origin) and Route53 (Domain resides in GoDaddy).
+
+Below is the Github Workflow file used to build and deploy to AWS S3. It carries out the following actions:
+- Setup and Ubuntu instance (AWS CLI is included natively withint this instance)
+- Setup AWS variables
+- Install nodeJS
+- Install project Dependencies
+- Install Gatsby CLI
+- Install Gatsby S3 Plugin
+- Deploy to S3 via Gatsby CLI command
+
 
 ## GitHub Workflow File
 
@@ -68,6 +87,12 @@ jobs:
 ```
 
 ## Cloudformation Template
+
+Below is the Cloudformation template used to setup the AWS resources required to host the website. It creates the following resources in AWS:
+- S3 Buckets with public access allowed
+- IAM User with specific credentaials (IAM Policy) required by Gatsby CLI for deployment to the S3 Bucket
+
+Note: this file does not include setting up of AWS Cloudfront, AWS Route53, AWS ACM (SSL Certificates) resources as they require manual confgiuration depending on the Domain Registrar.
 
 ```yaml
 Description: Deploy postmanpat.dev to S3

@@ -9,8 +9,9 @@ cover: assets/postmanpat_architecture.png
 
 date: 2024-01-01
 ---
-# The Anatomy of postmanpat.dev
 ---
+# The Anatomy of postmanpat.dev
+
 As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed a simple, quick and easy pipeline for a Gatsby site. The pipeline needed to satisfy the following requirements:
 - Utulize AWS free tier resources
 - Main codebase to reside in GitHub (as oppose to AWS CodeCommit)
@@ -21,12 +22,15 @@ As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed
 - Simple automatic deployment of resources
 
 In exploring several options, including deployment and hosting via an EC2 instance, I found the following solution to be the most simple and cost efficient, requiring minimal usage and upkeep of AWS resources whilst maintaining the codebase in GitHub.
-
-## CI/CD Architecture
 ---
+## CI/CD Architecture
+
 ![postmanpat_architecture.png](assets/postmanpat_architecture.png)
 
 postmanpat.dev is hosted from an AWS S3 bucket with a CI/CD pipeline utulizing Github Workflows to build, compile and deploy to S3 via an Ubuntu instance. Upon new pushes or merges to the main repository, the GitHub Workflow will trigger a new page build and automatically deploy to the S3 bucket. The content is then served via AWS Cloudfront (S3 Origin) and Route53 (Domain resides in GoDaddy).
+
+---
+## GitHub Workflow File
 
 Below is the Github Workflow file used to build and deploy to AWS S3. It carries out the following actions:
 - Setup Ubuntu instance (AWS CLI is included natively withint this instance)
@@ -37,9 +41,6 @@ Below is the Github Workflow file used to build and deploy to AWS S3. It carries
 - Install Gatsby S3 Plugin
 - Deploy to S3 via Gatsby CLI command
 
-
-## GitHub Workflow File
----
 ```yaml
 name: Deploy to AWS S3
 
@@ -84,9 +85,9 @@ jobs:
       - name: Deploy to S3
         run: npm run build && npm run deploy
 ```
-
-## Cloudformation Template
 ---
+## Cloudformation Template
+
 Below is the Cloudformation template used to setup the AWS resources required to host the website. It creates the following resources in AWS:
 - S3 Buckets with public access allowed
 - IAM User with specific credentaials (IAM Policy) required by Gatsby CLI for deployment to the S3 Bucket

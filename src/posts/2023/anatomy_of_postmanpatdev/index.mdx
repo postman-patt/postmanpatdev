@@ -9,7 +9,6 @@ cover: assets/postmanpat_architecture.png
 
 date: 2024-01-01
 ---
----
 # The Anatomy of postmanpat.dev
 
 As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed a simple, quick and easy pipeline for a Gatsby site. The pipeline needed to satisfy the following requirements:
@@ -22,7 +21,9 @@ As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed
 - Simple automatic deployment of resources
 
 In exploring several options, including deployment and hosting via an EC2 instance, I found the following solution to be the most simple and cost efficient, requiring minimal usage and upkeep of AWS resources whilst maintaining the codebase in GitHub.
+
 ---
+
 ## CI/CD Architecture
 
 ![postmanpat_architecture.png](assets/postmanpat_architecture.png)
@@ -86,7 +87,7 @@ jobs:
         run: npm run build && npm run deploy
 ```
 ---
-## Cloudformation Template
+## CloudFormation Template
 
 Below is the Cloudformation template used to setup the AWS resources required to host the website. It creates the following resources in AWS:
 - S3 Buckets with public access allowed

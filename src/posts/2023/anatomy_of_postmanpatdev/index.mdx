@@ -9,10 +9,12 @@ cover: assets/postmanpat_architecture.png
 
 date: 2024-01-01
 ---
-# Anatomy of postmanpat.dev
+# The Anatomy of postmanpat.dev
+
+---
 
 As [postmanpat.dev](http://postmanpat.dev) is a portfolio/blog website, I needed a simple, quick and easy pipeline for a Gatsby site. The pipeline needed to satisfy the following requirements:
-- Utulize AWS ecosystem
+- Utulize AWS free tier resources
 - Main codebase to reside in GitHub (as oppose to AWS CodeCommit)
 - Able to build and deploy upon push to the repository
 - Cost efficient
@@ -24,22 +26,25 @@ In exploring several options, including deployment and hosting via an EC2 instan
 
 ## CI/CD Architecture
 
-### Diagram of postmanpat.dev CI/CD 
+---
+
 ![postmanpat_architecture.png](assets/postmanpat_architecture.png)
 
-postmanpat.dev is hosted on Amazon S3 bucket with a CI/CD pipeline utulizing Github Workflows to build, compile and deploy to S3 via an Ubuntu instance. Upon new pushes or merges to the main repository, the GitHub Workflow will trigger a new page build and automatically deploy to the S3 bucket. The content is then served via AWS Cloudfront (S3 Origin) and Route53 (Domain resides in GoDaddy).
+postmanpat.dev is hosted from an AWS S3 bucket with a CI/CD pipeline utulizing Github Workflows to build, compile and deploy to S3 via an Ubuntu instance. Upon new pushes or merges to the main repository, the GitHub Workflow will trigger a new page build and automatically deploy to the S3 bucket. The content is then served via AWS Cloudfront (S3 Origin) and Route53 (Domain resides in GoDaddy).
 
 Below is the Github Workflow file used to build and deploy to AWS S3. It carries out the following actions:
-- Setup and Ubuntu instance (AWS CLI is included natively withint this instance)
+- Setup Ubuntu instance (AWS CLI is included natively withint this instance)
 - Setup AWS variables
 - Install nodeJS
-- Install project Dependencies
+- Install project dependencies
 - Install Gatsby CLI
 - Install Gatsby S3 Plugin
 - Deploy to S3 via Gatsby CLI command
 
 
 ## GitHub Workflow File
+
+---
 
 ```yaml
 name: Deploy to AWS S3
@@ -87,6 +92,8 @@ jobs:
 ```
 
 ## Cloudformation Template
+
+---
 
 Below is the Cloudformation template used to setup the AWS resources required to host the website. It creates the following resources in AWS:
 - S3 Buckets with public access allowed

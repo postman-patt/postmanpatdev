@@ -10,7 +10,7 @@ const Post = (props: PostProps): React.ReactElement => {
 
   return (
     <article
-      className="w-full prose prose-sm sm:prose overflow-hidden prose-red"
+      className="w-full prose prose-sm sm:prose overflow-hidden prose-red prose-img:object-contain"
       style={{ maxWidth: "860px" }}
     >
       {children}

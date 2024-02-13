@@ -1,0 +1,44 @@
+---
+title: "Salesforce: Shadow DOM"
+
+summary: "How to handle Shadow DOMS in Salesforce via Selenium"
+
+slug: /salesforce-shadow-dom
+
+cover: assets/salesforce_logo_blue.jpg
+
+date: 2024-02-01
+---
+![alt](assets/salesforce_logo.png)
+#
+#
+#
+# Salesforce: Shadow Dom
+
+An important aspect of web components is encapsulation — being able to keep the markup structure, style, and behavior hidden and separate from other code on the page so that different parts do not clash, and the code can be kept nice and clean. The Shadow DOM API is a key part of this, providing a way to attach a hidden separated DOM to an element. This article covers the basics of using the Shadow DOM.
+
+Salesforce uses a concept of a shadow dom. 
+
+For example, navigation buttons such as “one-app-nav-bar-item-root” are Shadow Host/Roots
+
+<aside>
+💡 **Selenium is unable to select any elements within the Shadow Dom (child nodes) using the basic selectors.**
+</aside>
+
+To handle shadow dom elements in salesforce you can either use xpath and locate/select the Shadow Host and break down the dom elements from that point, this will invovle using the the getShadowRoot() method.
+
+```java
+WebElement shadowHost = driver.findElement(By.cssSelector("#shadow_host"));
+SearchContext shadowRoot = shadowHost.getShadowRoot();
+WebElement shadowContent = shadowRoot.findElement(By.cssSelector("#shadow_content"));
+```
+
+Another method of working with Shadow Dom is through the use of JavascriptExecutor
+
+```java
+WebElement shadowHost = driver.findElement(By.cssSelector("#shadow_host"));
+JavascriptExecutor jsDriver = (JavascriptExecutor) driver;
+
+WebElement shadowRoot = (WebElement) jsDriver.executeScript("return arguments[0].shadowRoot", shadowHost);
+WebElement shadowContent = shadowRoot.findElement(By.cssSelector("#shadow_content"));
+```

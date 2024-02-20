@@ -1,0 +1,64 @@
+---
+title: "Test Automation: Salesforce (Part 1)"
+
+summary: "Detailing the key challenges and complexities of automating Salesform CRM Platform"
+
+slug: /test-automation-salesforce-part-1
+
+cover: assets/salesforce_logo_blue.jpg
+
+date: 2024-02-21
+---
+![alt](assets/salesforce_logo.png)
+#
+#
+#
+# Test Automation: Salesforce (Part 1)
+
+One of my first ever professional projects as a test automation engineer working for a client which we will refer to as “the Business”, was the automation of the Salesforce CRM platform using Selenium Python. Prior to this, I had only automated simple bespoke websites created with frameworks such as React and AngularJS. Those familiar with React and AngularJS would know that they also follow a strict component structure which lends itself to test automation’s use of POM/POJO structures. With simple GUI’s and consistent behaviours, these were of very little challenge and required very little planning and forethought when building out a comprehensive test automation framework. In most cases, we simply followed the structure provided to us by the frontend framework, as well as the data structures provided by the backend framework and database schemas.
+
+In working on the Salesforce platform, I discovered a whole new world of complexity. Salesforce, much like many established SAAS CRM platforms, possess’ many challenges for those attempting to automate it. These challenges present themselves in the form of:
+
+- **Complex and dynamic HTML structures**
+- **Shadow DOM’s**
+- **MFA**
+- **Inconsistent timings**
+- **Add-ons**
+- **Integrations**
+- **Long E2E workflows**
+- **Complex interconnected data objects**
+
+If the base level Saleforce Platform wasn’t already a challenge in itself, many of the points above were made worse by the fact that we were working on a highly customised add-on of Salesforce called nCino, tailored specifically for the financial sector. 
+
+Imagine if you will, trying to automate a system (Salesforce) that is being developed to offer a flexible and dynamic solution to customer relationship management. Meaning the system has to be easily customisable and configurable by the Business. Meaning the HTML structure is going to be a mess of dynamically generated nested components. At the same time, there is a seperate company developing an add-on (nCino) for this system, to modify it in a way such that it caters to the needs of lending/financial services. This means imposing new GUI’s and data structures on an already complex base salesforce platform. Not only this, but at the same time, we have yet **another** team of developers from the Business, configuring and customising both nCino and Salesforce to fit their specific business needs. The layers of changes flow down from Salesforce developers to nCino developers to the businesses in-house developers, and then finally reaching its way down to the testers and automators such as myself. With every change from each development team adding an additional layer of complexity to an already bloated platform, automating this system seemed like a mountainous task. 
+
+## Problem Statement
+
+The main objective during my tenure at the Business, was to create a comprehensive enterprise level testing framework. This framework would start at automating their single source of truth, Salesforce/nCino, and then extend itself to other major integrated systems. This meant that the objective was not simply to automated Salesforce itself, but to do so in such a flexible way such that the framework can accomodate other integrated systems later down the line.
+
+## Key Challenges with automating nCino
+
+Aside from the challenges of automating Salesforce noted above, there are some challenges specific to automating the add-on known as nCino. These include:
+
+- Custom component classes and tag names
+- Nested Iframes
+- Interconnected Data Structures
+- Shadow DOM’s
+
+## Options considered
+
+Python Selenium was not the first option considered, although it was the one we ultimately chose to go with. Other options include:
+
+- COPADO Robot Framework
+- TOSCA
+- Java Selenium
+- Playwright
+- Webdriverio
+
+Each option has their own advantages and disadvantages. The primary reason as to why Python Selenium was selected was due to:
+
+Flexibility - Other GUI automation tools (COPADO) would be difficult to accomodate external integrated systems
+
+Maintainability - Many of the Businesses other bespoke software offerings and cloud based architectural components were Python based and therefore the Business already possessed employees well versed in Python
+
+Costs - Other GUI tools could incur additional costs in both annual licenses and training

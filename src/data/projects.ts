@@ -66,5 +66,15 @@ export const projects: ProjectType[] = [
         tags: ['Website', 'AWS', 'Cloud Resume'],
         demoURL:"https://postmanpat.dev/",
         githubURL: "https://github.com/postman-patt/postmanpatdev"
+    },
+    {
+        id: "7",
+        projectName: 'CPI Data Visualisation',
+        summary: 'A data visualisation project designed to provide a clear graphical view of complex CPI hierarchies.\n\nThe main objective was to make large datasets easier to analyse by surfacing hierarchical relationships in a more intuitive format. In addition to improving analysis, the project also allowed users to alter the underlying data and generate different scenarios, making it easier to explore how changes would flow through the hierarchy and affect the wider dataset.',
+        startDate: 'Feb 2024',
+        endDate: 'Nov 2024',
+        tags: ['Data Visualisation', 'CPI', 'Analytics', 'Hierarchies', 'Scenario Modelling'],
+        demoURL: "",
+        githubURL: ""
     }
 ]

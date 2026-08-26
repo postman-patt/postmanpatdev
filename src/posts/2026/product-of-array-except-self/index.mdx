@@ -1,0 +1,76 @@
+---
+title: "Product of Array Except Self"
+
+summary: "LeetCode question 238. Product of Array Except Self - prefix and suffix products"
+
+slug: /product-of-array-except-self
+
+cover: assets/leetcode_post.png
+
+date: 2026-04-12
+---
+# 238. Product of Array Except Self
+
+[Product of Array Except Self - LeetCode](https://leetcode.com/problems/product-of-array-except-self/)
+
+The key idea is to avoid division and instead use prefix and suffix products.
+
+## Intuition
+
+For each index, we want the product of every value except the one at that index.
+
+If division were always allowed, we could multiply everything together and divide by the current number. But the problem specifically pushes us toward a different approach, and division would also become messy when zeroes are involved.
+
+The better way to think about it is:
+
+- everything to the left of index `i`
+- everything to the right of index `i`
+
+If we know the product of the left side and the product of the right side, then multiplying them together gives the answer for that index.
+
+So the problem becomes one of building prefix products and suffix products efficiently.
+
+## Implementation
+
+I use the result array itself to store prefix products first.
+
+In the first pass from left to right:
+
+- `prefix` starts at `1`
+- `res[i]` stores the product of everything before `i`
+- then `prefix` is multiplied by `nums[i]`
+
+In the second pass from right to left:
+
+- `suffix` starts at `1`
+- multiply `res[i]` by the current suffix product
+- then update `suffix` by multiplying it with `nums[i]`
+
+After both passes, each position contains:
+
+- product of all elements to the left
+- multiplied by product of all elements to the right
+
+Which is exactly the required result.
+
+```python
+# 238. Product of Array Except Self
+
+def productExceptSelf(nums):
+    res = [1] * len(nums)
+
+    prefix = 1
+    for i in range(len(nums)):
+        res[i] = prefix
+        prefix *= nums[i]
+
+    suffix = 1
+    for i in range(len(nums) - 1, -1, -1):
+        res[i] *= suffix
+        suffix *= nums[i]
+
+    return res
+
+
+print(productExceptSelf([1, 2, 3, 4]))
+```

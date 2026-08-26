@@ -1,0 +1,69 @@
+---
+title: "Longest Substring Without Repeating Characters"
+
+summary: "LeetCode question 3. Longest Substring Without Repeating Characters - sliding window"
+
+slug: /longest-substring-without-repeating-characters
+
+cover: assets/leetcode_post.png
+
+date: 2026-01-11
+---
+# 3. Longest Substring Without Repeating Characters
+
+[Longest Substring Without Repeating Characters - LeetCode](https://leetcode.com/problems/longest-substring-without-repeating-characters/)
+
+This is a very common sliding window problem.
+
+## Intuition
+
+We want the longest substring that contains no repeated characters.
+
+The natural way to think about this is as a moving window over the string.
+
+As we expand the window to the right, we keep track of which characters are currently inside it. If the next character is not already present, then the window is still valid and we can keep growing it.
+
+The problem happens when a duplicate appears. At that point, the current window is no longer valid, so we need to shrink it from the left until the duplicate has been removed.
+
+This is exactly why the sliding window pattern works so well here:
+
+- expand when the state is valid
+- shrink when the state becomes invalid
+
+## Implementation
+
+I use:
+
+- a `set` called `chars` to store the characters currently in the window
+- a `left` pointer for the start of the window
+- a `right` pointer from the loop for the end of the window
+
+For each character at `right`:
+
+- if it is already in the set, repeatedly remove characters from the left side and move `left` forward
+- once the duplicate is gone, add the new character to the set
+- update the best window length with `right - left + 1`
+
+This guarantees that the window always contains unique characters before measuring its size.
+
+```python
+# 3. Longest Substring Without Repeating Characters
+
+def lengthOfLongestSubstring(s):
+    chars = set()
+    left = 0
+    best = 0
+
+    for right in range(len(s)):
+        while s[right] in chars:
+            chars.remove(s[left])
+            left += 1
+
+        chars.add(s[right])
+        best = max(best, right - left + 1)
+
+    return best
+
+
+print(lengthOfLongestSubstring("abcabcbb"))
+```

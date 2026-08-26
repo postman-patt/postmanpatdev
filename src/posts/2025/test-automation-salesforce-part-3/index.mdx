@@ -1,0 +1,212 @@
+---
+title: "Test Automation: Salesforce (Part 3)"
+
+summary: "Practical lessons from automating Salesforce and nCino with Behave and Selenium"
+
+slug: /test-automation-salesforce-part-3
+
+cover: assets/salesforce_logo_blue.jpg
+
+date: 2026-08-25
+---
+![alt](assets/salesforce_logo.png)
+#
+#
+#
+# Test Automation: Salesforce (Part 3)
+
+In [Part 2](/test-automation-salesforce-part-2), I focused on framework design and why the combination of Behave, Selenium, and Python made sense for an enterprise Salesforce implementation. This final part covers the practical side: the things that usually make or break a Salesforce automation suite once real project pressure arrives.
+
+In my experience, the difference between a promising automation framework and a genuinely useful one comes down to how it handles failure. Not just failed assertions, but failed locators, failed waits, failed test data assumptions, and failed environment stability. Salesforce and nCino expose all of those weaknesses very quickly.
+
+## 1. Waiting strategy matters more than most teams expect
+
+One of the fastest ways to create a flaky suite is to rely on hard sleeps.
+
+Salesforce pages often render in stages. A page may appear visually complete while related lists are still loading, a component may be present in the DOM but not yet clickable, or a spinner may vanish while a background refresh is still taking place. This becomes even more difficult in nCino, where complex record screens can trigger multiple chained updates after a single user action.
+
+Because of that, explicit waits were far more reliable than arbitrary `sleep()` calls.
+
+```python
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+
+class BasePage:
+    def __init__(self, driver, timeout=20):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, timeout)
+
+    def wait_for_clickable(self, locator):
+        return self.wait.until(EC.element_to_be_clickable(locator))
+
+    def wait_for_visible(self, locator):
+        return self.wait.until(EC.visibility_of_element_located(locator))
+```
+
+The more effective pattern was to build waits around business-relevant states:
+
+- a toast message confirms a save
+- a status field changes value
+- a related record appears in a table
+- a loading mask disappears from a specific container
+
+That is much more stable than sleeping for five seconds and hoping the UI has settled.
+
+## 2. Shadow DOM and iframes need first-class support
+
+Part 1 mentioned shadow DOM and nested iframes as core challenges. These were not edge cases. They appeared often enough that the framework needed dedicated helpers for them.
+
+Salesforce component structures can hide useful elements behind shadow roots, while certain nCino workflows can embed content inside frames. If your framework treats these as unusual one-off problems, your page objects quickly become inconsistent.
+
+For shadow DOM, the framework should expose a clean helper rather than forcing every page object to repeat the traversal logic. I covered this in more detail in my separate post on [Salesforce shadow DOM](/salesforce-shadow-dom).
+
+```python
+def find_in_shadow_root(driver, host_locator, inner_locator):
+    host = driver.find_element(*host_locator)
+    shadow_root = host.shadow_root
+    return shadow_root.find_element(*inner_locator)
+```
+
+The same principle applied to iframes.
+
+```python
+from selenium.webdriver.support import expected_conditions as EC
+
+
+def switch_to_frame(driver, wait, frame_locator):
+    wait.until(EC.frame_to_be_available_and_switch_to_it(frame_locator))
+
+
+def switch_back_to_default(driver):
+    driver.switch_to.default_content()
+```
+
+By standardising this behaviour, you reduce the number of page-specific hacks and make failures easier to diagnose.
+
+## 3. Long end-to-end workflows should be broken into sensible capabilities
+
+A common trap in enterprise GUI automation is trying to prove everything in one giant scenario. In a lending context this can mean:
+
+- customer creation
+- opportunity creation
+- loan application setup
+- document attachment
+- credit assessment
+- approval
+- settlement
+
+All in a single flow.
+
+Those scenarios can be useful as a thin layer of true end-to-end smoke coverage, but they should not become the bulk of the suite. When they fail, diagnosis is slow. They are also expensive to maintain because any upstream UI change can invalidate the whole chain.
+
+The more effective approach for us was to build each section of the loan creation process on its own.
+
+Rather than starting with one enormous test that attempted to cover the full lending journey from the beginning, we automated the workflow in smaller business-aligned sections. For example, one part of the suite might focus on creating or preparing the customer and opportunity, another on creating the loan application itself, another on completing financial information, and another on progressing the application through later stages.
+
+This gave us a set of smaller, reusable automation capabilities. Each part could be validated on its own, debugged on its own, and maintained on its own. Once those individual sections were stable, we were then able to stitch them together to create fuller end-to-end tests.
+
+That stitching process was important because it allowed the true end-to-end scenarios to be assembled from known working building blocks, rather than written as one large fragile script. It also meant we could decide deliberately how much of the journey to exercise in a given test. Some scenarios only needed to validate one section of the process. Others could chain multiple sections together to prove a broader lending flow.
+
+A better structure is to keep:
+
+- a **small number of full journey scenarios** for critical coverage
+- a **larger set of narrower scenarios** that validate each business capability independently
+
+This gives you much better signal. When a scenario fails, you want to know whether the issue is in customer setup, loan creation, status progression, document handling, or an integration handoff. Very long scenarios blur that distinction.
+
+In practice, this modular approach made the end-to-end coverage far more realistic to maintain. The smaller workflow sections acted almost like composable test units. They served their own purpose individually, but they also formed the basis of the broader end-to-end suite.
+
+## 4. Data setup is a reliability issue, not just a convenience issue
+
+When working with nCino, test data was often more complex than the UI automation itself.
+
+Records were connected to each other in ways that directly affected workflow outcomes. A test could fail because of the UI, but it could also fail because:
+
+- the customer record was owned by the wrong user
+- the application was in the wrong stage
+- a required related record had not been created
+- reference data differed between environments
+- another test had already mutated the same record
+
+This is why mature GUI automation frameworks do not treat data as a manual precondition. They define a strategy for it.
+
+Where possible, the best approach is usually:
+
+1. create or prepare data outside the UI
+2. use the UI only for the workflow actually under test
+3. clean up or isolate data so tests do not interfere with each other
+
+Even when pure API-driven setup is not available, the framework should still make data creation deliberate and reusable rather than burying it inside unrelated scenarios.
+
+## 5. Logging and diagnostics are not optional
+
+When a Salesforce test fails, the first question is rarely "did the assertion fail?" More often it is:
+
+- was the element never rendered
+- did the page refresh unexpectedly
+- did the selector break
+- was the record missing
+- were we in the wrong frame
+- did the system show a validation error that the test did not expect
+
+Without proper diagnostics, every failure turns into manual rework.
+
+At minimum, the framework should capture:
+
+- screenshots on failure
+- the current URL
+- the active record identifier where relevant
+- console or driver logs where available
+- clear step-level failure messages
+
+This sounds basic, but it makes an enormous difference when a suite grows and starts failing under CI conditions instead of a local machine.
+
+## 6. Reuse should happen at the component level, not only at the scenario level
+
+One of the most useful lessons from this project was that reuse in Salesforce automation often comes from widget patterns rather than pages.
+
+For example, the framework benefited from shared abstractions for:
+
+- lookup fields
+- search dialogs
+- record tables
+- modal forms
+- toast notifications
+- related lists
+
+These controls appeared repeatedly, often with slightly different surrounding markup. Once the framework had reusable objects for them, new automation became faster to write and easier to maintain.
+
+That was far more valuable than trying to create a massive inheritance hierarchy of page objects.
+
+## 7. Stable automation requires alignment with the wider delivery team
+
+This is the point that many purely technical discussions leave out.
+
+Salesforce automation becomes much easier when the test team has working agreements with developers, admins, and product owners. Examples include:
+
+- stable test accounts and permissions
+- predictable environment refresh practices
+- clear ownership of broken test data
+- agreed naming conventions for records used by automation
+- realistic expectations about what should be covered in the UI layer
+
+No framework design can fully compensate for unstable environments or poor team coordination. The technical solution only works properly when the delivery process supports it.
+
+## Final thoughts
+
+Automating Salesforce and nCino with Behave and Selenium was not difficult because the tools were weak. It was difficult because the platform combined dynamic UI behaviour, deep data relationships, long workflows, and constant business-driven change.
+
+What made the work successful was not a clever locator or a single automation trick. It was a combination of design decisions:
+
+- business-readable scenarios
+- thin step definitions
+- reusable component objects
+- disciplined waits
+- deliberate test data management
+- strong diagnostics
+
+That combination gave the framework a reasonable chance of surviving real enterprise use.
+
+If I had to reduce the whole experience to one lesson, it would be this: for platforms like Salesforce and nCino, test automation succeeds or fails on structure. The scripting itself is only the visible part.

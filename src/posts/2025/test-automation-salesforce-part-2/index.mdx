@@ -1,0 +1,217 @@
+---
+title: "Test Automation: Salesforce (Part 2)"
+
+summary: "Designing a Behave and Selenium framework for Salesforce and nCino"
+
+slug: /test-automation-salesforce-part-2
+
+cover: assets/salesforce_logo_blue.jpg
+
+date: 2026-08-24
+---
+![alt](assets/salesforce_logo.png)
+#
+#
+#
+# Test Automation: Salesforce (Part 2)
+
+In [Part 1](/test-automation-salesforce-part-1), I outlined why Salesforce and nCino were such a difficult pair to automate in the first place. The challenge was not just that the UI was dynamic, or that the data was deeply interconnected. The larger challenge was that we needed to build something that could survive change. The Business was not looking for a short-lived proof of concept. It needed a framework that could support repeated releases, multiple squads, and eventually other integrated platforms outside of Salesforce.
+
+This is where the choice of tooling started to matter. It is easy to discuss tooling at a surface level and compare feature lists. In practice, the more important question is whether the tool helps you organise complexity. For this work, **Behave** and **Selenium** were chosen largely because the existing engineering stack already made heavy use of **Python**. That meant the team could build on familiar language patterns and existing internal capability, rather than introducing another language or toolset purely for UI automation.
+
+## Why Behave and Selenium
+
+Behave and Selenium were selected for two main reasons.
+
+The first was alignment with the existing Python-based tech stack. The Business already had engineers working with Python across other areas of the platform, which made the framework easier to maintain and easier to extend without creating a separate specialist ecosystem around the test suite.
+
+The second was flexibility. We were not trying to automate only a browser. We needed a testing approach that could interact with other services beyond the UI, because Salesforce and nCino sat in the middle of a wider integrated system landscape. Selenium handled the browser layer, while Python and Behave gave us the freedom to orchestrate API calls, data setup, and interactions with other systems in the same framework.
+
+Behave also provided a useful structure around that choice:
+
+- **Readable business scenarios**. Product owners, testers, and business analysts could all read Gherkin scenarios without needing to inspect the Python code.
+- **A clear separation of concerns**. Behave encouraged us to keep business intent in feature files, automation logic in step definitions, and UI interactions in page or component objects.
+- **A natural place to orchestrate multiple systems**. A scenario could describe a business flow while the underlying step code coordinated Salesforce, APIs, and other integrated platforms.
+
+Behave was not a silver bullet. Poorly written Gherkin can become just as messy as poorly written code. But in an enterprise setting, where the same suite may be read by both technical and non-technical stakeholders, the format was valuable.
+
+## Packaging integrations with Poetry
+
+One of the more useful design decisions was to use **Poetry** to package test functionality and interactions for different integrated systems.
+
+Rather than placing every system interaction into one large shared codebase, teams could own packages aligned to specific integrations. In practice, one team might work on the testing package for a particular application or service. If our team needed to interact with that application, we could pull that package into the framework and use its existing actions, helpers, and abstractions rather than rebuilding them ourselves.
+
+This helped in a few ways:
+
+- it reduced duplicated automation logic across teams
+- it gave each integration a clearer ownership model
+- it made cross-system testing more modular
+- it reinforced the idea that the framework was not just a Selenium UI project, but a broader enterprise testing platform
+
+That packaging model fit naturally with Python and Behave. A business scenario could remain readable at the top level, while the implementation underneath could call into dedicated packages for the systems involved in that workflow.
+
+## The real design problem
+
+The core design problem was this:
+
+> How do you create automation that expresses business workflows clearly, while still being robust enough to deal with Salesforce and nCino's unstable UI layers?
+
+If the framework leaned too far toward technical abstraction, it became hard for non-developers to understand what was being tested. If it leaned too far toward business readability, the underlying automation became repetitive and fragile. The right answer was to introduce layers.
+
+## Framework structure
+
+At a high level, the framework was easier to manage when divided into the following layers:
+
+1. **Feature files**
+2. **Step definitions**
+3. **Page objects and component objects**
+4. **Shared utilities**
+5. **Test data and environment configuration**
+
+### 1. Feature files
+
+Feature files described the workflow in business language. In a lending platform this might include:
+
+- creating a customer
+- creating an opportunity
+- progressing an application through a lending stage
+- validating the outcome of an approval decision
+
+The important point was to describe intent, not click-by-click UI detail.
+
+```gherkin
+Feature: Loan application submission
+
+  Scenario: Submit a new loan application for an existing customer
+    Given I am logged into Salesforce
+    And a retail customer already exists
+    When I create a new loan application for that customer
+    And I submit the application for assessment
+    Then the application status should be "Submitted"
+```
+
+This level of phrasing was useful because it preserved the business narrative. If the UI changed but the process remained the same, the scenario could stay stable while the implementation beneath it evolved.
+
+### 2. Step definitions
+
+Step definitions translated business steps into reusable automation code. This was where discipline mattered. The temptation with Behave is to make each step do too much, which creates large, brittle definitions that are hard to reuse.
+
+The better approach was to keep steps thin and delegate the actual work elsewhere.
+
+```python
+from behave import given, when, then
+
+
+@given("I am logged into Salesforce")
+def step_login(context):
+    context.login_page.open()
+    context.login_page.login_as_default_user()
+
+
+@when("I create a new loan application for that customer")
+def step_create_application(context):
+    context.application_service.create_for_existing_customer(context.customer)
+
+
+@then('the application status should be "{expected_status}"')
+def step_validate_status(context, expected_status):
+    actual_status = context.application_page.get_status()
+    assert actual_status == expected_status
+```
+
+Notice that the steps say very little about selectors, waits, or element traversal. That complexity belongs deeper in the framework.
+
+### 3. Page objects and component objects
+
+Traditional page objects were useful, but in Salesforce and nCino they were not enough by themselves. Many screens contained repeatable widgets, tables, drawers, modal windows, related lists, and lookup controls that appeared across multiple pages. Treating all of that as a single page object quickly became unmaintainable.
+
+A better pattern was to split the UI into:
+
+- **page objects** for high-level screens
+- **component objects** for reusable UI fragments
+
+This reduced duplication and gave the framework a more natural shape.
+
+```python
+class OpportunityPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.header = RecordHeader(driver)
+        self.related_list = RelatedList(driver)
+
+    def open_related_applications(self):
+        self.related_list.open("Applications")
+
+
+class RecordHeader:
+    def __init__(self, driver):
+        self.driver = driver
+
+    def current_stage(self):
+        return self.driver.find_element(...).text
+```
+
+That structure mattered because Salesforce UIs are not cleanly linear. The same component patterns appear in many places, but often with slightly different markup. Component-level abstraction kept those differences contained.
+
+### 4. Shared utilities
+
+Utilities were essential for the awkward parts of Salesforce automation:
+
+- waiting for spinners to disappear
+- switching into iframes
+- traversing shadow DOM roots
+- handling browser alerts
+- capturing screenshots and logs on failure
+- generating stable timestamps or unique test references
+
+If these helpers were not centralised, step definitions and page objects became cluttered with repeated low-level code.
+
+### 5. Test data and environment configuration
+
+This was one of the most important but most overlooked parts of the framework.
+
+In nCino, a simple workflow often depended on a chain of related records. A loan application might depend on:
+
+- an account
+- one or more contacts
+- an opportunity
+- financial details
+- supporting documents
+- specific user permissions or queue ownership
+
+That meant test data could not be treated as an afterthought. In our case, Salesforce test data was created through the **API**, backed by a deep understanding of Salesforce's object architecture and the data points required by the system.
+
+We knew which objects had to exist in order to create a loan, an entity, or other financial products. More importantly, we also understood the linkages between those objects. That meant data creation was not a matter of inserting isolated records. It required creating the right records in the right relationships, with the right values, so that downstream workflows in Salesforce and nCino behaved as expected.
+
+This approach was critical. Using the UI to build all prerequisite records would have made the suite far slower and far more fragile. Creating the data through the API allowed the framework to prepare states deliberately and consistently, while reserving the UI layer for the business actions that actually needed browser-level validation.
+
+## Selector strategy
+
+A major lesson from Salesforce automation is that selector strategy is architecture, not a minor implementation detail.
+
+If the framework depends on brittle CSS class chains or deep absolute XPath selectors, failures become routine. A more stable approach is to prefer:
+
+- visible labels where they are consistently rendered
+- semantic attributes where the platform provides them
+- reusable helper methods for common widget types
+- relative locators anchored to stable parent containers
+
+The framework should also accept that some components will still require ugly selectors. The goal is not selector purity. The goal is to isolate unstable selectors so they do not leak across the whole suite.
+
+## Why this approach worked
+
+The combination of Behave, Selenium, Python, Poetry, and API-driven data setup worked because each piece solved a different part of the problem.
+
+- **Behave** gave the suite a business-readable outer layer.
+- **Selenium** handled the browser automation challenges inside Salesforce and nCino.
+- **Python** aligned the framework with the existing engineering stack.
+- **Poetry packages** made it possible to modularise interactions with other integrated systems.
+- **API-driven Salesforce data setup** made complex business preconditions faster and more reliable to create.
+
+This mattered more than choosing the newest automation tool. In enterprise environments, the best framework is often the one that the team can realistically maintain after the initial implementation is over, and that can support the wider system landscape rather than only the UI.
+
+## Final thoughts
+
+The biggest mistake you can make when automating Salesforce and nCino is to think of the problem as "web automation, but bigger". It is really a framework design problem. The UI is only one part of it. The more important concerns are how you express business workflows, where you place fragile logic, how you manage data, and how you prevent the suite from collapsing under constant platform change.
+
+In Part 3, I will go into the practical side of the implementation: how we handled waits, iframes, shadow DOM, long workflows, and the patterns that helped keep the suite reliable.

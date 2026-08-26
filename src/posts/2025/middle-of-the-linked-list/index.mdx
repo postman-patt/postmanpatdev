@@ -1,0 +1,62 @@
+---
+title: "Middle of the Linked List"
+
+summary: "LeetCode question 876. Middle of the Linked List - slow and fast pointers"
+
+slug: /middle-of-the-linked-list
+
+cover: assets/leetcode_post.png
+
+date: 2025-04-13
+---
+# 876. Middle of the Linked List
+
+[Middle of the Linked List - LeetCode](https://leetcode.com/problems/middle-of-the-linked-list/)
+
+This is a good use case for the slow and fast pointer pattern.
+
+## Intuition
+
+The linked list only gives us forward traversal, so we cannot jump straight to the middle the way we might with an array.
+
+A clean way around that is to use two pointers moving at different speeds:
+
+- a `slow` pointer moves one step at a time
+- a `fast` pointer moves two steps at a time
+
+If one pointer moves twice as fast as the other, then by the time the fast pointer reaches the end of the list, the slow pointer will have covered only half as much distance. That places it at the middle.
+
+This avoids needing to count the list length first and then do a second pass.
+
+## Implementation
+
+Both `slow` and `fast` start at `head`.
+
+While `fast` and `fast.next` both exist:
+
+- move `slow` forward by one node
+- move `fast` forward by two nodes
+
+Once the loop stops, `slow` is pointing at the middle node, so that is what we return.
+
+For even-length lists, this pattern naturally returns the second middle node, which matches the requirement of the problem.
+
+```python
+# 876. Middle of the Linked List
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
+def middleNode(head):
+    slow = head
+    fast = head
+
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+    return slow
+```

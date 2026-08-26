@@ -1,0 +1,66 @@
+---
+title: "Binary Search"
+
+summary: "LeetCode question 704. Binary Search - halving the search space"
+
+slug: /binary-search
+
+cover: assets/leetcode_post.png
+
+date: 2024-10-13
+---
+# 704. Binary Search
+
+[Binary Search - LeetCode](https://leetcode.com/problems/binary-search/)
+
+Since the array is already sorted, binary search is much more efficient than scanning linearly.
+
+## Intuition
+
+The key observation is that sorted order gives us information every time we inspect the middle value.
+
+If the middle value is smaller than the target, then everything to the left of that middle value is also too small, so we can ignore that entire half.
+
+If the middle value is larger than the target, then everything to the right can be ignored.
+
+So instead of checking every number one by one, we repeatedly cut the remaining search space in half. That is what gives binary search its efficiency.
+
+## Implementation
+
+I keep two pointers:
+
+- `left` at the start of the array
+- `right` at the end of the array
+
+While `left <= right`, I calculate the middle index with integer division.
+
+There are then three possibilities:
+
+- `nums[mid] == target`: return `mid`
+- `nums[mid] < target`: move `left` to `mid + 1`
+- `nums[mid] > target`: move `right` to `mid - 1`
+
+If the loop finishes, the target does not exist in the array, so I return `-1`.
+
+```python
+# 704. Binary Search
+
+def search(nums, target):
+    left = 0
+    right = len(nums) - 1
+
+    while left <= right:
+        mid = (left + right) // 2
+
+        if nums[mid] == target:
+            return mid
+        if nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+
+    return -1
+
+
+print(search([-1, 0, 3, 5, 9, 12], 9))
+```

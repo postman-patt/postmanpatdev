@@ -1,0 +1,75 @@
+---
+title: "Container With Most Water"
+
+summary: "LeetCode question 11. Container With Most Water - two pointers from both ends"
+
+slug: /container-with-most-water
+
+cover: assets/leetcode_post.png
+
+date: 2025-07-13
+---
+# 11. Container With Most Water
+
+[Container With Most Water - LeetCode](https://leetcode.com/problems/container-with-most-water/)
+
+This medium problem becomes much simpler with a two-pointer approach.
+
+## Intuition
+
+The area of water held by two lines depends on:
+
+- the width between them
+- the shorter of the two heights
+
+At first glance, brute force seems natural because there are many possible pairs. But checking every pair would be too slow.
+
+The important insight is that the shorter wall is always the limiting factor.
+
+So if we have two pointers at the ends:
+
+- we calculate the area they currently form
+- then we move the pointer with the smaller height inward
+
+Why? Because keeping the shorter wall and moving the taller one cannot increase the height limit. The only hope of improving the area is to find a taller shorter wall.
+
+## Implementation
+
+I start with:
+
+- `left = 0`
+- `right = len(height) - 1`
+
+For each step:
+
+1. calculate the width as `right - left`
+2. calculate the effective height as `min(height[left], height[right])`
+3. update the best area
+
+Then I move whichever side has the smaller height inward.
+
+This continues until the two pointers meet. The result is the maximum area found during that process.
+
+```python
+# 11. Container With Most Water
+
+def maxArea(height):
+    left = 0
+    right = len(height) - 1
+    best = 0
+
+    while left < right:
+        width = right - left
+        curr_height = min(height[left], height[right])
+        best = max(best, width * curr_height)
+
+        if height[left] < height[right]:
+            left += 1
+        else:
+            right -= 1
+
+    return best
+
+
+print(maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]))
+```

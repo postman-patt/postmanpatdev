@@ -1,0 +1,72 @@
+---
+title: "Valid Parentheses"
+
+summary: "LeetCode question 20. Valid Parentheses - using a stack"
+
+slug: /valid-parentheses
+
+cover: assets/leetcode_post.png
+
+date: 2024-07-14
+---
+# 20. Valid Parentheses
+
+[Valid Parentheses - LeetCode](https://leetcode.com/problems/valid-parentheses/)
+
+This is a classic stack question and one of the clearest examples of when a stack is the right data structure.
+
+## Intuition
+
+The important detail is that brackets must close in the reverse order that they were opened.
+
+For example, if we open with `(` and then `[`, we must close `[` before we close `(`.
+
+That "last opened, first closed" behaviour is exactly what a stack is good at.
+
+So the approach is:
+
+- if we see an opening bracket, push it onto the stack
+- if we see a closing bracket, check whether it matches the most recent opening bracket
+
+If it does not match, then the string is immediately invalid.
+
+At the end, the stack must also be empty. If there are still opening brackets left over, then not everything was properly closed.
+
+## Implementation
+
+I use a dictionary called `mapping` where each closing bracket points to the opening bracket it expects.
+
+When iterating through the string:
+
+- if the current character is a closing bracket, I check the top of the stack
+- if the stack is empty or the top does not match, I return `False`
+- otherwise I pop the stack
+
+If the character is not in `mapping`, it must be an opening bracket, so I append it to the stack.
+
+Finally, I return `len(stack) == 0` to confirm that every opening bracket has been matched.
+
+```python
+# 20. Valid Parentheses
+
+def isValid(s):
+    stack = []
+    mapping = {
+        ")": "(",
+        "]": "[",
+        "}": "{"
+    }
+
+    for char in s:
+        if char in mapping:
+            if not stack or stack[-1] != mapping[char]:
+                return False
+            stack.pop()
+        else:
+            stack.append(char)
+
+    return len(stack) == 0
+
+
+print(isValid("()[]{}"))
+```

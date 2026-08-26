@@ -1,0 +1,67 @@
+---
+title: "Group Anagrams"
+
+summary: "LeetCode question 49. Group Anagrams - grouping by character counts"
+
+slug: /group-anagrams
+
+cover: assets/leetcode_post.png
+
+date: 2025-10-12
+---
+# 49. Group Anagrams
+
+[Group Anagrams - LeetCode](https://leetcode.com/problems/group-anagrams/)
+
+Words are anagrams if they contain the same characters with the same frequencies.
+
+## Intuition
+
+To group anagrams, we need a way to recognise when two different words are built from the same letters.
+
+One option is to sort each word and use the sorted version as the key. That works, but another clean approach is to count how many times each character appears.
+
+If two words are anagrams, then their character frequency counts will be identical.
+
+For lowercase English letters, that means we can represent each word using a fixed array of length 26:
+
+- index `0` stores the count of `a`
+- index `1` stores the count of `b`
+- and so on
+
+Two words that produce the same count array belong in the same group.
+
+## Implementation
+
+I use a `defaultdict(list)` so each key automatically collects the words that belong to it.
+
+For each word:
+
+- create a fresh count array of 26 zeroes
+- loop through each character and increment the corresponding position
+- convert the list to a tuple so it can be used as a dictionary key
+
+Then append the word to `groups[tuple(count)]`.
+
+At the end, the grouped values of the dictionary are the answer.
+
+```python
+# 49. Group Anagrams
+
+from collections import defaultdict
+
+
+def groupAnagrams(strs):
+    groups = defaultdict(list)
+
+    for word in strs:
+        count = [0] * 26
+        for char in word:
+            count[ord(char) - ord("a")] += 1
+        groups[tuple(count)].append(word)
+
+    return list(groups.values())
+
+
+print(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+```

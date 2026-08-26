@@ -1,0 +1,64 @@
+---
+title: "Best Time to Buy and Sell Stock"
+
+summary: "LeetCode question 121. Best Time to Buy and Sell Stock - tracking minimum price"
+
+slug: /best-time-to-buy-and-sell-stock
+
+cover: assets/leetcode_post.png
+
+date: 2025-01-12
+---
+# 121. Best Time to Buy and Sell Stock
+
+[Best Time to Buy and Sell Stock - LeetCode](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+
+The main idea is to keep track of the lowest price seen so far.
+
+## Intuition
+
+If we want the maximum profit, then for each day we should ask:
+
+> If I sold today, what is the best buy price I could have used earlier?
+
+That means we do not need to compare every pair of days. We only need to remember the smallest price we have seen so far as we scan from left to right.
+
+For each current price:
+
+- treat it as a possible selling price
+- subtract the minimum earlier price
+- update the best profit if needed
+
+This works because the buy must happen before the sell, and scanning left to right naturally preserves that rule.
+
+## Implementation
+
+I use:
+
+- `min_price` to store the cheapest price seen so far
+- `max_profit` to store the best profit found so far
+
+For each price in the list:
+
+- update `min_price`
+- calculate `price - min_price`
+- compare it with `max_profit`
+
+If prices only go downward, then no profitable trade exists, and `max_profit` correctly remains `0`.
+
+```python
+# 121. Best Time to Buy and Sell Stock
+
+def maxProfit(prices):
+    min_price = float("inf")
+    max_profit = 0
+
+    for price in prices:
+        min_price = min(min_price, price)
+        max_profit = max(max_profit, price - min_price)
+
+    return max_profit
+
+
+print(maxProfit([7, 1, 5, 3, 6, 4]))
+```

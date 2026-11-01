@@ -1,0 +1,72 @@
+---
+title: "Minimum Moves to Equal Array Elements"
+
+summary: "LeetCode question 453. Minimum Moves to Equal Array Elements - sum of differences from the minimum"
+
+slug: /min-moves-to-equal-array
+
+cover: assets/leetcode_post.png
+
+date: 2026-11-01
+---
+# 453. Minimum Moves to Equal Array Elements
+
+[Minimum Moves to Equal Array Elements - LeetCode](https://leetcode.com/problems/minimum-moves-to-equal-array-elements/)
+
+The key idea is to look at how each move changes the differences between the numbers.
+
+## Intuition
+
+We want to make every element equal. In one move, we can increase exactly `n - 1` elements by `1`.
+
+Simulating those moves would mean repeatedly choosing which element to leave unchanged. But there is a simpler way to think about the operation.
+
+Increasing every element except one has the same relative effect as decreasing that one element by `1`.
+
+For example, starting with `[1, 2, 3]`, increasing the first two elements gives `[2, 3, 3]`. If we then subtract `1` from every element, we get `[1, 2, 2]`.
+
+Subtracting the same amount from every element does not change whether they are equal. So, for counting moves, we can treat each operation as decreasing one element instead.
+
+In this version of the problem, the best target is the smallest number already in the array:
+
+- we cannot reach a larger target using only decreases
+- choosing a smaller target would require extra moves for every element
+
+That means each number needs `num - min_num` moves. Adding those differences gives the minimum total.
+
+For `[1, 2, 3]`, the minimum is `1`:
+
+```text
+(1 - 1) + (2 - 1) + (3 - 1) = 0 + 1 + 2 = 3
+```
+
+The original operations would make the array equal at `[4, 4, 4]`. The minimum value is our target in the equivalent decreasing version, not the final value in the original array.
+
+## Implementation
+
+I use:
+
+- `min_num` to store the smallest value in `nums`
+- a list comprehension to calculate each number's difference from `min_num`
+- `sum()` to add those differences together
+
+If every element is already equal, all the differences are `0`, so the result is also `0`.
+
+```python
+# 453. Minimum Moves to Equal Array Elements
+
+def minMoves(nums):
+    min_num = min(nums)
+
+    return sum([num - min_num for num in nums])
+
+
+print(minMoves([1, 2, 3]))  # 3
+```
+
+## Complexity
+
+- Time: `O(n)`. Finding the minimum, building the list of differences, and summing it each take linear time.
+- Space: `O(n)`. The list comprehension creates a temporary list containing one difference per element.
+
+Using `sum(num - min_num for num in nums)` would avoid creating that list and reduce the extra space to `O(1)`.
